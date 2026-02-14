@@ -29,8 +29,8 @@ const Navbar = () => {
         </ul>
 
         <div className="nav-actions">
-          <a href="/login" className="login-btn">Login</a>
-          <button className="start-btn">Start for free</button>
+          <Link to="/login" className="login-btn">Login</Link>
+          <Link to="/personalize" className="start-btn">Start for free</Link>
         </div>
       </div>
     </nav>

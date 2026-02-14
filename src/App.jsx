@@ -7,6 +7,7 @@ import ConditionDetail from './pages/ConditionDetail';
 import Scan from './pages/Scan';
 import Deficiency from './pages/Deficiency';
 import CookWithUs from './pages/CookWithUs';
+import Login from './pages/Login';
 import './index.css';
 
 // Utility to scroll to top on route change
@@ -45,6 +46,7 @@ function App() {
             />
             <Route path="/deficiency" element={<Deficiency />} />
             <Route path="/cook" element={<CookWithUs />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
         <footer className="footer">

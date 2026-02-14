@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import '../styles/Hero.css';
 
@@ -45,13 +46,13 @@ const Hero = () => {
                         </div>
                         <p><strong>4.9★</strong> average user satisfaction</p>
                     </div>
-                    <button className="hero-btn">
+                    <Link to="/personalize" className="hero-btn">
                         Start For Free
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="hero-visual" ref={imageRef}>
