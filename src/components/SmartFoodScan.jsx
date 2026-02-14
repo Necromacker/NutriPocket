@@ -1,43 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, ChevronLeft, Trash2, X, ChevronUp, Loader2, Upload, CheckCircle2 } from 'lucide-react';
+import { Camera, ChevronLeft, Trash2, X, ChevronUp, Loader2, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/SmartScan.css';
 
 const SmartScan = () => {
     const [photo, setPhoto] = useState(null);
+    const [photoFile, setPhotoFile] = useState(null); // Store the actual file
     const [foodName, setFoodName] = useState('');
     const [showNutrition, setShowNutrition] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+    const [nutritionData, setNutritionData] = useState(null);
+    const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
-
-    // Mock data for nutrition analysis
-    const nutritionData = {
-        calories: 465,
-        protein: 23,
-        fat: 12,
-        carbs: 45,
-        ingredients: [
-            { id: 1, name: 'Pan-Seared Beef', quantity: '150g', cals: 320, p: '24g', f: '15g' },
-            { id: 2, name: 'Asparagus Spears', quantity: '120g', cals: 25, p: '2g', f: '0g' },
-            { id: 3, name: 'Extra Virgin Olive Oil', quantity: '1 tbsp', cals: 120, p: '0g', f: '14g' }
-        ]
-    };
-
-    const macros = [
-        { label: 'Calories', value: nutritionData.calories, max: 2000, color: '#FF7D45' },
-        { label: 'Protein', value: nutritionData.protein, max: 150, color: 'var(--smart-primary)' },
-        { label: 'Fat', value: nutritionData.fat, max: 70, color: 'var(--smart-secondary)' },
-        { label: 'Carbs', value: nutritionData.carbs, max: 300, color: '#00ca82' },
-    ];
 
     const handlePhotoUpload = (e) => {
         e.preventDefault();
         const file = e.type === 'change' ? e.target.files[0] : e.dataTransfer.files[0];
         if (file) {
             setPhoto(URL.createObjectURL(file));
+            setPhotoFile(file);
+            setNutritionData(null); // Reset previous data
+            setError(null);
             if (!foodName) {
-                setFoodName(file.name.split('.')[0].replace(/[-_]/g, ' '));
+                // Just use a generic name until analysis
+                // setFoodName(file.name.split('.')[0].replace(/[-_]/g, ' '));
             }
         }
     };
@@ -56,19 +43,50 @@ const SmartScan = () => {
         handlePhotoUpload(e);
     };
 
-    const triggerSeeNutrition = () => {
+    const triggerSeeNutrition = async () => {
+        if (!photoFile) {
+            setError("Please upload a photo first.");
+            return;
+        }
+
         setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(true);
-            // Simulate deep analysis delay
-            setTimeout(() => {
-                setIsLoading(false);
-                setShowNutrition(true);
-            }, 1000);
-        }, 800);
+        setError(null);
+
+        const formData = new FormData();
+        formData.append('image', photoFile);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/identify', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error || 'Failed to analyze image');
+            }
+
+            const data = await response.json();
+            setNutritionData(data);
+            setFoodName(data.identified_food);
+            setShowNutrition(true);
+        } catch (err) {
+            console.error(err);
+            setError(err.message || "An error occurred during analysis.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const isInputValid = foodName.trim().length > 0 || photo !== null;
+    const isInputValid = photo !== null;
+
+    // Derived macros for display
+    const macros = nutritionData ? [
+        { label: 'Calories', value: Math.round(nutritionData.macros.calories), max: 2000, color: '#FF7D45' },
+        { label: 'Protein', value: Math.round(nutritionData.macros.protein), max: 150, color: 'var(--smart-primary)' },
+        { label: 'Fat', value: Math.round(nutritionData.macros.fat), max: 70, color: 'var(--smart-secondary)' },
+        { label: 'Carbs', value: Math.round(nutritionData.macros.carbs), max: 300, color: '#00ca82' },
+    ] : [];
 
     return (
         <div className="smart-scan-page">
@@ -114,7 +132,7 @@ const SmartScan = () => {
                                     >
                                         <img src={photo} alt="Preview" className="preview-image" />
                                         <button
-                                            onClick={(e) => { e.stopPropagation(); setPhoto(null); }}
+                                            onClick={(e) => { e.stopPropagation(); setPhoto(null); setPhotoFile(null); setNutritionData(null); }}
                                             className="remove-photo"
                                         >
                                             <X size={20} />
@@ -166,6 +184,18 @@ const SmartScan = () => {
                         />
                     </motion.div>
 
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="error-message"
+                            style={{ color: '#FF4D4D', textAlign: 'center', fontWeight: 'bold' }}
+                        >
+                            <AlertCircle size={16} style={{ display: 'inline', marginRight: '5px' }} />
+                            {error}
+                        </motion.div>
+                    )}
+
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -191,7 +221,7 @@ const SmartScan = () => {
 
             {/* Nutrition Result Panel */}
             <AnimatePresence>
-                {showNutrition && (
+                {showNutrition && nutritionData && (
                     <>
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -219,8 +249,8 @@ const SmartScan = () => {
                             <div className="container">
                                 <div className="panel-header">
                                     <div className="panel-title">
-                                        <h2>Analysis Result</h2>
-                                        <p className="panel-meta">Aggregated Food Insights</p>
+                                        <h2>{nutritionData.identified_food}</h2>
+                                        <p className="panel-meta">{nutritionData.description}</p>
                                     </div>
                                     <button onClick={() => setShowNutrition(false)} className="close-panel">
                                         <X size={24} />
@@ -248,7 +278,7 @@ const SmartScan = () => {
                                             <div className="progress-track">
                                                 <motion.div
                                                     initial={{ width: 0 }}
-                                                    animate={{ width: `${(macro.value / macro.max) * 100}%` }}
+                                                    animate={{ width: `${Math.min((macro.value / macro.max) * 100, 100)}%` }}
                                                     transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 + (i * 0.1) }}
                                                     className="progress-bar"
                                                     style={{ backgroundColor: macro.color }}
@@ -260,9 +290,9 @@ const SmartScan = () => {
 
                                 <div className="ingredients-section">
                                     <span className="section-label">Composition Breakdown</span>
-                                    {nutritionData.ingredients.map((item, idx) => (
+                                    {nutritionData.ingredients && nutritionData.ingredients.length > 0 ? nutritionData.ingredients.map((item, idx) => (
                                         <motion.div
-                                            key={item.id}
+                                            key={idx}
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 0.6 + (idx * 0.1) }}
@@ -277,8 +307,43 @@ const SmartScan = () => {
                                                 <span className="ing-cals-unit">KCAL</span>
                                             </div>
                                         </motion.div>
-                                    ))}
+                                    )) : (
+                                        <p style={{ color: 'var(--smart-text-dim)', fontStyle: 'italic', marginTop: '10px' }}>Ingredients breakdown not available for this recipe.</p>
+                                    )}
                                 </div>
+
+                                {/* Micronutrients Section */}
+                                {nutritionData.micronutrients && nutritionData.micronutrients.length > 0 && (
+                                    <div className="micronutrients-section" style={{ marginTop: '24px' }}>
+                                        <span className="section-label">Key Nutrients</span>
+                                        <div className="micro-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '10px', marginTop: '12px' }}>
+                                            {nutritionData.micronutrients.map((nutrient, idx) => (
+                                                <motion.div
+                                                    key={idx}
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ delay: 0.8 + (idx * 0.05) }}
+                                                    className="micro-pill"
+                                                    style={{
+                                                        background: 'rgba(255,255,255,0.03)',
+                                                        padding: '10px 14px',
+                                                        borderRadius: '10px',
+                                                        fontSize: '13px',
+                                                        fontWeight: '500',
+                                                        color: 'var(--smart-text)',
+                                                        border: '1px solid rgba(255,255,255,0.08)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '6px'
+                                                    }}
+                                                >
+                                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--smart-accent)' }} />
+                                                    {nutrient}
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
@@ -287,13 +352,13 @@ const SmartScan = () => {
                                     className="score-card"
                                 >
                                     <div className="score-info">
-                                        <h3>Highly Balanced</h3>
+                                        <h3>Health Insight</h3>
                                         <p className="score-text">
-                                            This selection optimal for sustaining high energy throughout the day.
+                                            {nutritionData.health_insight}
                                         </p>
                                     </div>
                                     <div className="score-value-group">
-                                        <div className="score-number">92</div>
+                                        <div className="score-number">{nutritionData.health_score}</div>
                                         <div className="score-label">Health Score</div>
                                     </div>
                                 </motion.div>

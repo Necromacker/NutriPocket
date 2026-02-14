@@ -5,14 +5,13 @@ import '../styles/FeatureCards.css';
 const FEATURES = [
     {
         id: 'personalize',
-        title: 'Precision Personalization',
-        subtitle: 'Decode Every Ingredient for YOUR Biology',
-        description: 'Stop guessing what is "healthy". Our replacement engine analyzes molecular matches to find the safest food alternatives for your specific medical conditions.',
+        title: 'Health Planner',
+        subtitle: 'Smart Meal Strategies ',
+        description: 'Take the complexity out of healthy eating. Our planner builds custom nutritional strategies based on your unique health profile, goals, and recurring symptoms.',
         points: [
-            'Condition-Specific Filters',
-            'Food Replacement Engine',
-            'Molecular Flavor Database',
-            'Safe/Risk Analysis'
+            'Input your health condition & dietary goals',
+            'Get condition-specific ingredient recommendations',
+            'Nutrient-balanced food suggestions for better health',
         ],
         color: '#6C48FF', // Purple
         link: '/personalize',
@@ -20,14 +19,14 @@ const FEATURES = [
     },
     {
         id: 'scan',
-        title: 'Micro-Impact Scanner',
-        subtitle: 'See the Invisible Micro-Impact',
-        description: 'Instantly decode vitamins and minerals in any food item to see how they affect your health.',
+        title: 'Smart Scan',
+        subtitle: 'Instant Nutrition Analysis',
+        description: 'Instantly decode vitamins, minerals, and overall health impact of any food item using advanced AI vision technology.',
         points: [
-            'Instant Nutrition Detection',
-            'Vitamin & Mineral Intel',
-            'Biological Role Explanation',
-            'Cam-to-Macro Insight'
+            'Click or upload food photos for analysis',
+            'Helps track what you eat in real time',
+            'Detailed nutrition breakdown',
+            'Rapid Real-time Analysis'
         ],
         color: '#FFB800', // Yellow
         link: '/scan',
@@ -35,18 +34,18 @@ const FEATURES = [
     },
     {
         id: 'deficiency',
-        title: 'Deficiency Detection',
-        subtitle: 'Listen to Your Body\'s Signals',
-        description: 'Connecting the dots between how you feel and what you eat. Identify micronutrient gaps based on recurring symptoms and get targetted superfood recommendations.',
+        title: 'Cook with us',
+        subtitle: 'Personalized Recipe Engine',
+        description: 'Discover delicious, health-optimized recipes tailored specifically to your nutritional needs, health goals, and available ingredients.',
         points: [
-            'Symptom-Logic Matching',
-            'Micronutrient Gap Finder',
-            'Targeted Superfoods',
-            'Daily Health Tracking'
+            'Condition-Safe Recipes',
+            'Dynamic Ingredient Swaps',
+            'Step-by-Step Guidance',
+            'AI voice assistant guides you while cooking'
         ],
         color: '#00D1FF', // Blue
         link: '/deficiency',
-        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800'
+        image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800'
     }
 ];
 
@@ -54,7 +53,7 @@ const FeatureCards = () => {
     return (
         <section className="feature-cards-section">
             <div className="features-intro">
-                <h2 className="section-title">One Platform. Three <span className="highlight">Game-Changers</span></h2>
+                <h1 className="section-title">One Platform. Three <span className="highlight">Powerful Features</span></h1>
             </div>
 
             <div className="cards-stack-container">
@@ -74,7 +73,7 @@ const FeatureCards = () => {
 
                                 <ul className="card-points">
                                     {feature.points.map(point => (
-                                        <li key={point}>{point}</li>
+                                        <li key={point}><span className="bullet">•</span> {point}</li>
                                     ))}
                                 </ul>
 
