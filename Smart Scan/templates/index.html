@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Identifier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nutrition-row:nth-child(even) {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-lg w-full text-center border border-gray-100 my-8">
+        <h1 class="text-3xl font-bold mb-2 text-gray-800">Food Identifier</h1>
+        <p class="text-gray-500 mb-8">Upload a photo to see what's on the plate</p>
+
+        <div class="mb-6 relative group">
+            <label for="imageInput" class="block w-full h-48 flex flex-col items-center justify-center
+                cursor-pointer border-2 border-dashed border-gray-300 rounded-xl bg-gray-50
+                hover:bg-blue-50 hover:border-blue-400 transition-all duration-300">
+                <div id="uploadPlaceholder" class="flex flex-col items-center">
+                    <svg class="w-10 h-10 text-gray-400 mb-2 group-hover:text-blue-500 transition-colors" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span class="text-sm text-gray-500 font-medium group-hover:text-blue-600">Click to upload
+                        image</span>
+                </div>
+                <img id="imagePreview" class="absolute inset-0 w-full h-full object-cover rounded-xl hidden" src="#"
+                    alt="Preview">
+            </label>
+            <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="previewImage(event)">
+        </div>
+
+        <button onclick="identifyFood()"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md flex items-center justify-center">
+            <span id="btnText">Identify Food</span>
+            <svg id="loadingSpinner" class="animate-spin ml-3 h-5 w-5 text-white hidden"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+            </svg>
+        </button>
+
+        <!-- Result Container -->
+        <div id="resultContainer" class="hidden mt-6 text-left">
+            <div class="p-4 bg-green-50 rounded-xl border border-green-200 animate-fade-in text-center mb-4">
+                <h2 class="text-sm font-semibold text-green-700 uppercase tracking-wide">Identified Dish</h2>
+                <p id="foodName" class="text-2xl font-bold text-green-900 mt-1"></p>
+                <p id="foodDescription" class="text-sm text-green-800 mt-2 px-2"></p>
+            </div>
+
+            <!-- Nutrition Info -->
+            <div id="nutritionContainer" class="hidden animate-fade-in">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-blue-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800">Nutrition Facts</h3>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium"
+                            id="matchedRecipeTag">Matched Recipe</span>
+                    </div>
+                    <div class="p-4">
+                        <div id="nutritionGrid" class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorContainer" class="hidden mt-6 p-4 bg-red-50 rounded-xl border border-red-200 animate-fade-in">
+            <p id="errorMessage" class="text-sm font-medium text-red-700"></p>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const output = document.getElementById('imagePreview');
+                    const placeholder = document.getElementById('uploadPlaceholder');
+
+                    output.src = e.target.result;
+                    output.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+
+                    // Reset results when new image is picked
+                    document.getElementById('resultContainer').classList.add('hidden');
+                    document.getElementById('nutritionContainer').classList.add('hidden');
+                    document.getElementById('errorContainer').classList.add('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function identifyFood() {
+            const input = document.getElementById('imageInput');
+            if (input.files.length === 0) {
+                // Show simple error animation or alert
+                const container = input.parentElement;
+                container.classList.add('animate-pulse', 'border-red-400');
+                setTimeout(() => container.classList.remove('animate-pulse', 'border-red-400'), 500);
+                return;
+            }
+
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // UI Updates
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('loadingSpinner');
+            const resultContainer = document.getElementById('resultContainer');
+            const nutritionContainer = document.getElementById('nutritionContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            const nutritionGrid = document.getElementById('nutritionGrid');
+
+            btnText.textContent = "Analyzing...";
+            spinner.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            nutritionContainer.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+            // Clear previous nutrition data
+            nutritionGrid.innerHTML = '';
+
+            try {
+                const response = await fetch('/identify', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Update main food info
+                    document.getElementById('foodName').textContent = data.identified_food || data.food_name; // fallback
+                    document.getElementById('foodDescription').textContent = data.description || '';
+
+                    document.getElementById('resultContainer').classList.remove('hidden');
+
+                    // Handle Nutrition Data
+                    if (data.nutrition_info) {
+                        const info = data.nutrition_info;
+
+                        // Define detailed mapping of keys to display labels
+                        // Adjust these keys based on your actual JSON structure in nutrition.json
+                        const displayKeys = [
+                            { key: 'cal (kcal)', label: 'Calories' },
+                            { key: 'Protein (g)', label: 'Protein' },
+                            { key: 'Fat (g)', label: 'Fat' },
+                            { key: 'Carbohydrate, by difference (g)', label: 'Carbs' },
+                            { key: 'Sugars, total (g)', label: 'Sugar' },
+                            { key: 'Fiber, total dietary (g)', label: 'Fiber' },
+                            { key: 'Cholesterol (mg)', label: 'Cholesterol' },
+                            { key: 'Sodium (mg)', label: 'Sodium' },
+                            { key: 'Calcium (mg)', label: 'Calcium' },
+                            { key: 'Iron (mg)', label: 'Iron' },
+                            { key: 'Vitamin A, IU (IU)', label: 'Vitamin A' },
+                            { key: 'Vitamin C, total ascorbic acid (mg)', label: 'Vitamin C' }
+                        ];
+
+                        let html = '';
+                        displayKeys.forEach(item => {
+                            if (info[item.key]) {
+                                html += `
+                                    <div class="flex justify-between py-1 border-b border-gray-100 last:border-0 hover:bg-gray-50 px-2 rounded">
+                                        <span class="text-gray-600 font-medium">${item.label}</span>
+                                        <span class="text-gray-900 font-bold">${info[item.key]}</span>
+                                    </div>
+                                `;
+                            }
+                        });
+
+                        // Fallback: iterate over all keys if known keys are missing, or just show match title
+                        if (html === '') {
+                            // Just show a few basic ones if found or raw keys
+                            for (const [key, value] of Object.entries(info)) {
+                                if (key !== 'recipeTitle' && key !== '_id' && typeof value !== 'object') {
+                                    html += `
+                                        <div class="flex justify-between py-1 border-b border-gray-100 last:border-0 hover:bg-gray-50 px-2 rounded">
+                                            <span class="text-gray-600 font-medium truncate pr-2 w-2/3" title="${key}">${key}</span>
+                                            <span class="text-gray-900 font-bold">${value}</span>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        }
+
+                        if (html) {
+                            nutritionGrid.innerHTML = html;
+                            document.getElementById('matchedRecipeTag').textContent = `Matches: ${info.recipeTitle}`;
+                            nutritionContainer.classList.remove('hidden');
+                        }
+                    }
+
+                } else {
+                    document.getElementById('errorMessage').textContent = data.error || "Failed to identify food.";
+                    errorContainer.classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = "Connection error. Please try again.";
+                console.error(error);
+                errorContainer.classList.remove('hidden');
+            } finally {
+                // Reset button
+                btnText.textContent = "Identify Food";
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
