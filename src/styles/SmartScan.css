@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --smart-bg: #020202;
-    --smart-card: #0a0a0a;
-    --smart-lighter: #141414;
-    --smart-lime: #D8FF42;
-    --smart-orange: #FF7D45;
-    --smart-purple: #A855F7;
-    --smart-pink: #EC4899;
-    --smart-text: #ffffff;
-    --smart-text-dim: #71717a;
-    --smart-border: rgba(255, 255, 255, 0.08);
+    --smart-bg: #FFFCEF;
+    --smart-card: #ffffff;
+    --smart-lighter: #F5F2E1;
+    --smart-primary: #0050FF;
+    --smart-secondary: #FF4DAA;
+    --smart-accent: #00ca82;
+    --smart-text: #1A1A1A;
+    --smart-text-dim: #555555;
+    --smart-border: #1A1A1A;
+    --smart-shadow: 6px 6px 0px #1A1A1A;
 }
 
 .smart-scan-page {
@@ -18,9 +18,7 @@
     background-color: var(--smart-bg);
     color: var(--smart-text);
     font-family: 'Outfit', sans-serif;
-    padding: 100px 24px 60px;
-    selection-background-color: var(--smart-lime);
-    selection-color: #000;
+    padding: 40px 24px 80px;
 }
 
 .container {
@@ -37,21 +35,21 @@
 }
 
 .back-button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--smart-border);
-    border-radius: 999px;
-    padding: 12px;
-    color: var(--smart-text-dim);
-    transition: all 0.3s ease;
+    background: var(--smart-card);
+    border: 4px solid var(--smart-border);
+    border-radius: 12px;
+    padding: 10px;
+    color: var(--smart-text);
+    box-shadow: 4px 4px 0px var(--smart-border);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .back-button:hover {
-    border-color: rgba(216, 255, 66, 0.3);
-    color: #fff;
-    transform: translateX(-2px);
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0px var(--smart-border);
 }
 
 .title-group h1 {
@@ -80,28 +78,28 @@
 }
 
 .upload-zone {
-    height: 300px;
+    height: 320px;
     background: var(--smart-card);
-    border: 2px dashed var(--smart-border);
-    border-radius: 40px;
+    border: 4px solid var(--smart-border);
+    border-radius: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    box-shadow: 8px 8px 0px var(--smart-border);
 }
 
 .upload-zone:hover {
-    border-color: rgba(216, 255, 66, 0.4);
-    background: rgba(216, 255, 66, 0.02);
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px var(--smart-border);
 }
 
 .upload-zone.drag-active {
-    border-color: var(--smart-lime);
-    background: rgba(216, 255, 66, 0.05);
+    background: var(--smart-lighter);
 }
 
 .preview-container {
@@ -120,23 +118,24 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
-    border: none;
-    border-radius: 999px;
+    background: var(--smart-secondary);
+    border: 3px solid var(--smart-border);
+    border-radius: 12px;
     padding: 8px;
     color: #fff;
     z-index: 10;
+    box-shadow: 4px 4px 0px var(--smart-border);
 }
 
 .photo-overlay-tag {
     position: absolute;
     bottom: 24px;
     left: 24px;
-    background: var(--smart-lime);
-    color: #000;
+    background: var(--smart-primary);
+    color: #fff;
     padding: 8px 16px;
-    border-radius: 999px;
+    border: 3px solid var(--smart-border);
+    border-radius: 8px;
     font-size: 10px;
     font-weight: 900;
     text-transform: uppercase;
@@ -144,6 +143,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 4px 4px 0px var(--smart-border);
 }
 
 .upload-prompt {
@@ -157,7 +157,7 @@
 .upload-title {
     font-size: 1.75rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--smart-text);
     margin: 0;
     letter-spacing: -0.01em;
 }
@@ -165,27 +165,22 @@
 .upload-icon-box {
     width: 90px;
     height: 90px;
-    background: #111;
-    border-radius: 30px;
+    background: var(--smart-lighter);
+    border: 4px solid var(--smart-border);
+    border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #444;
-    transition: all 0.3s ease;
-}
-
-.upload-zone:hover .upload-icon-box {
-    color: var(--smart-lime);
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(216, 255, 66, 0.1);
+    color: var(--smart-text);
+    box-shadow: 4px 4px 0px var(--smart-border);
 }
 
 .or-divider {
     display: flex;
     align-items: center;
     gap: 24px;
-    color: #222;
-    font-size: 10px;
+    color: var(--smart-text);
+    font-size: 12px;
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
@@ -196,60 +191,59 @@
 .or-divider::after {
     content: "";
     flex: 1;
-    height: 1px;
-    background: #111;
+    height: 3px;
+    background: var(--smart-border);
 }
 
 .dish-name-input {
     width: 100%;
     background: var(--smart-card);
-    border: 1px solid var(--smart-border);
-    border-radius: 24px;
-    padding: 20px 32px;
+    border: 4px solid var(--smart-border);
+    border-radius: 16px;
+    padding: 20px 24px;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #fff;
-    transition: all 0.3s ease;
+    color: var(--smart-text);
+    box-shadow: 6px 6px 0px var(--smart-border);
     outline: none;
+    transition: all 0.2s ease;
 }
 
 .dish-name-input:focus {
-    border-color: var(--smart-lime);
-    box-shadow: 0 0 0 4px rgba(216, 255, 66, 0.05);
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px var(--smart-border);
 }
 
 .analyze-button {
     width: 100%;
     padding: 24px;
-    border-radius: 999px;
-    background: var(--smart-lime);
-    color: #000;
+    border-radius: 16px;
+    background: var(--smart-secondary);
+    color: #fff;
     font-size: 1.25rem;
     font-weight: 900;
-    font-style: italic;
     text-transform: uppercase;
-    border: none;
+    border: 4px solid var(--smart-border);
     margin-top: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 20px 40px rgba(216, 255, 66, 0.15);
+    box-shadow: 6px 6px 0px var(--smart-border);
+    transition: all 0.2s ease;
 }
 
 .analyze-button:disabled {
-    background: var(--smart-lighter);
-    color: #444;
-    border: 1px solid var(--smart-border);
+    background: #ccc;
+    color: #888;
+    border: 4px solid #888;
     box-shadow: none;
     cursor: not-allowed;
 }
 
 .analyze-button:not(:disabled):hover {
-    transform: translateY(-4px) scale(1.02);
-    background: #e3ff70;
-    box-shadow: 0 25px 50px rgba(216, 255, 66, 0.25);
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0px var(--smart-border);
 }
 
 /* Nutrition Panel */
@@ -258,21 +252,20 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(40px);
-    border-top: 1px solid var(--smart-border);
-    border-radius: 50px 50px 0 0;
+    background: var(--smart-bg);
+    border-top: 6px solid var(--smart-border);
+    border-radius: 40px 40px 0 0;
     padding: 60px 40px 100px;
     max-height: 92vh;
     overflow-y: auto;
     z-index: 100;
-    box-shadow: 0 -20px 80px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.1);
 }
 
 .grab-handle {
     width: 60px;
     height: 6px;
-    background: var(--smart-lighter);
+    background: var(--smart-border);
     border-radius: 10px;
     position: absolute;
     top: 24px;
@@ -292,7 +285,7 @@
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    color: var(--smart-lime);
+    color: var(--smart-primary);
     letter-spacing: -0.04em;
 }
 
@@ -305,18 +298,19 @@
 }
 
 .close-panel {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--smart-border);
-    border-radius: 20px;
-    padding: 12px;
-    color: var(--smart-text-dim);
-    transition: all 0.3s ease;
+    background: var(--smart-card);
+    border: 3px solid var(--smart-border);
+    border-radius: 12px;
+    padding: 10px;
+    color: var(--smart-text);
+    box-shadow: 4px 4px 0px var(--smart-border);
+    transition: all 0.2s ease;
 }
 
 .close-panel:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(90deg);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--smart-border);
+    color: var(--smart-secondary);
 }
 
 /* Macros Grid */
@@ -350,6 +344,7 @@
 .macro-amount {
     font-size: 1.5rem;
     font-weight: 900;
+    color: var(--smart-text);
 }
 
 .macro-unit {
@@ -359,16 +354,18 @@
 }
 
 .progress-track {
-    height: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    height: 20px;
+    background: #fff;
     border-radius: 999px;
-    border: 1px solid var(--smart-border);
+    border: 4px solid var(--smart-border);
     overflow: hidden;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05) inset;
 }
 
 .progress-bar {
     height: 100%;
     border-radius: 999px;
+    border-right: 4px solid var(--smart-border);
 }
 
 /* Ingredients List */
@@ -383,21 +380,21 @@
 }
 
 .ingredient-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--smart-border);
-    border-radius: 32px;
+    background: #fff;
+    border: 4px solid var(--smart-border);
+    border-radius: 20px;
     padding: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    box-shadow: 6px 6px 0px var(--smart-border);
+    transition: all 0.2s ease;
 }
 
 .ingredient-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateX(4px);
-    border-color: rgba(255, 255, 255, 0.15);
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px var(--smart-border);
 }
 
 .ing-details h4 {
@@ -431,15 +428,17 @@
 .ing-cals-unit {
     font-size: 10px;
     font-weight: 900;
-    color: #222;
+    color: var(--smart-text-dim);
 }
 
 /* Summary Score */
 .score-card {
-    background: var(--smart-lime);
-    color: #000;
+    background: var(--smart-primary);
+    color: #fff;
     padding: 40px;
-    border-radius: 45px;
+    border-radius: 24px;
+    border: 4px solid var(--smart-border);
+    box-shadow: 10px 10px 0px var(--smart-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -458,7 +457,7 @@
 .score-text {
     font-size: 0.875rem;
     font-weight: 700;
-    opacity: 0.7;
+    opacity: 0.9;
     max-width: 80%;
 }
 

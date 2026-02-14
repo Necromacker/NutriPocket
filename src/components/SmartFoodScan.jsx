@@ -25,10 +25,10 @@ const SmartScan = () => {
     };
 
     const macros = [
-        { label: 'Calories', value: nutritionData.calories, max: 2000, color: 'var(--smart-orange)' },
-        { label: 'Protein', value: nutritionData.protein, max: 150, color: 'var(--smart-purple)' },
-        { label: 'Fat', value: nutritionData.fat, max: 70, color: 'var(--smart-lime)' },
-        { label: 'Carbs', value: nutritionData.carbs, max: 300, color: 'var(--smart-pink)' },
+        { label: 'Calories', value: nutritionData.calories, max: 2000, color: '#FF7D45' },
+        { label: 'Protein', value: nutritionData.protein, max: 150, color: 'var(--smart-primary)' },
+        { label: 'Fat', value: nutritionData.fat, max: 70, color: 'var(--smart-secondary)' },
+        { label: 'Carbs', value: nutritionData.carbs, max: 300, color: '#00ca82' },
     ];
 
     const handlePhotoUpload = (e) => {
