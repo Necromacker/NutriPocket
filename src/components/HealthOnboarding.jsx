@@ -14,6 +14,11 @@ const CONDITIONS = [
         toAvoid: ['Canned Soup', 'Pickles', 'Processed Meat', 'Salted Nuts']
     },
     {
+        id: 'lactose', label: 'Lactose Intolerant', icon: '🥛', description: 'Dairy-free molecular alternatives',
+        toEat: ['Almond Milk', 'Coconut Yogurt', 'Oat Milk', 'Hard Aged Cheese'],
+        toAvoid: ['Milk', 'Soft Cheese', 'Ice Cream', 'Butter']
+    },
+    {
         id: 'kidney', label: 'Kidney Issues', icon: '💧', description: 'Low potassium/sodium/phosphorus',
         toEat: ['Cauliflower', 'Blueberries', 'Red Bell Pepper', 'Garlic'],
         toAvoid: ['Oranges', 'Bananas', 'Spinach', 'Potatoes']
@@ -35,10 +40,15 @@ const CONDITIONS = [
     },
 ];
 
-const HealthOnboarding = ({ userProfile, onUpdateProfile }) => {
+const HealthOnboarding = ({ userProfile, onUpdateProfile, filterQuery = '' }) => {
     const [selectedFoodForReplacement, setSelectedFoodForReplacement] = useState(null);
     const [replacements, setReplacements] = useState([]);
     const [loadingReplacement, setLoadingReplacement] = useState(false);
+
+    const filteredConditions = CONDITIONS.filter(condition =>
+        condition.label.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        condition.description.toLowerCase().includes(filterQuery.toLowerCase())
+    );
 
     const toggleCondition = (id) => {
         const newConditions = userProfile.conditions.includes(id)
@@ -51,9 +61,6 @@ const HealthOnboarding = ({ userProfile, onUpdateProfile }) => {
         setSelectedFoodForReplacement(food);
         setLoadingReplacement(true);
 
-        // Simulating the flavor matching logic directed by the user
-        // In a real scenario, we'd compare 'food' with a database of alternatives
-        // to find top 3 with highest molecule matches
         setTimeout(() => {
             const mockReplacements = [
                 { name: `${food} Alternative A`, matches: '842', matchPct: '92%' },
@@ -72,48 +79,54 @@ const HealthOnboarding = ({ userProfile, onUpdateProfile }) => {
                 <p className="section-subtitle">Select your health conditions to get tailered food recommendations and safety alerts.</p>
 
                 <div className="conditions-grid">
-                    {CONDITIONS.map((condition) => (
-                        <div key={condition.id} className="condition-wrapper">
-                            <div
-                                className={`condition-card ${userProfile.conditions.includes(condition.id) ? 'active' : ''}`}
-                                onClick={() => toggleCondition(condition.id)}
-                            >
-                                <div className="condition-icon">{condition.icon}</div>
-                                <h3>{condition.label}</h3>
-                                <p>{condition.description}</p>
-                                <div className="checkbox">
-                                    {userProfile.conditions.includes(condition.id) && <span>✓</span>}
+                    {filteredConditions.length > 0 ? (
+                        filteredConditions.map((condition) => (
+                            <div key={condition.id} className="condition-wrapper">
+                                <div
+                                    className={`condition-card ${userProfile.conditions.includes(condition.id) ? 'active' : ''}`}
+                                    onClick={() => toggleCondition(condition.id)}
+                                >
+                                    <div className="condition-icon">{condition.icon}</div>
+                                    <h3>{condition.label}</h3>
+                                    <p>{condition.description}</p>
+                                    <div className="checkbox">
+                                        {userProfile.conditions.includes(condition.id) && <span>✓</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {userProfile.conditions.includes(condition.id) && (
-                                <div className="condition-details animate-in">
-                                    <div className="details-box eat-list">
-                                        <h4>✅ Foods to Eat</h4>
-                                        <ul>
-                                            {condition.toEat.map(food => (
-                                                <li key={food}>
-                                                    <span>{food}</span>
-                                                    <button
-                                                        className="replace-btn-small"
-                                                        onClick={(e) => { e.stopPropagation(); findReplacements(food); }}
-                                                    >
-                                                        Find Replacement
-                                                    </button>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                {userProfile.conditions.includes(condition.id) && (
+                                    <div className="condition-details animate-in">
+                                        <div className="details-box eat-list">
+                                            <h4>✅ Foods to Eat</h4>
+                                            <ul>
+                                                {condition.toEat.map(food => (
+                                                    <li key={food}>
+                                                        <span>{food}</span>
+                                                        <button
+                                                            className="replace-btn-small"
+                                                            onClick={(e) => { e.stopPropagation(); findReplacements(food); }}
+                                                        >
+                                                            Find Replacement
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div className="details-box avoid-list">
+                                            <h4>❌ Foods to Avoid</h4>
+                                            <ul>
+                                                {condition.toAvoid.map(food => <li key={food}>{food}</li>)}
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div className="details-box avoid-list">
-                                        <h4>❌ Foods to Avoid</h4>
-                                        <ul>
-                                            {condition.toAvoid.map(food => <li key={food}>{food}</li>)}
-                                        </ul>
-                                    </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-results">
+                            <p>No matching health conditions found. Try searching for "BP", "Sugar" or "Milk".</p>
                         </div>
-                    ))}
+                    )}
                 </div>
 
                 {selectedFoodForReplacement && (
@@ -147,6 +160,18 @@ const HealthOnboarding = ({ userProfile, onUpdateProfile }) => {
                     </div>
                 )}
             </div>
+            <style jsx>{`
+                .no-results {
+                    grid-column: 1 / -1;
+                    padding: 4rem;
+                    text-align: center;
+                    background: white;
+                    border: 3px dashed #E0E0E0;
+                    border-radius: 20px;
+                    color: #888;
+                    font-size: 1.2rem;
+                }
+            `}</style>
         </section>
     );
 };

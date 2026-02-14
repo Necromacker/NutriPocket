@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Personalize from './pages/Personalize';
+import ConditionDetail from './pages/ConditionDetail';
 import Scan from './pages/Scan';
 import Deficiency from './pages/Deficiency';
 import './index.css';
@@ -32,6 +33,10 @@ function App() {
             <Route
               path="/personalize"
               element={<Personalize userProfile={userProfile} onUpdateProfile={setUserProfile} />}
+            />
+            <Route
+              path="/personalize/:conditionId"
+              element={<ConditionDetail userProfile={userProfile} onUpdateProfile={setUserProfile} />}
             />
             <Route
               path="/scan"
