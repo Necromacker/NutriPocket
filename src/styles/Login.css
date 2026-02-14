@@ -1,0 +1,277 @@
+.login-page {
+    min-height: 100vh;
+    background-color: var(--bg-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 2rem;
+}
+
+.login-container {
+    max-width: 1100px;
+    width: 100%;
+    background: white;
+    border: 5px solid #000;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 12px 12px 0px #000;
+}
+
+/* Unused Left Side styles removed */
+
+/* Right Side - Form */
+.login-right {
+    padding: 4rem 3rem;
+    background: var(--bg-cream);
+    display: flex;
+    justify-content: center;
+}
+
+.form-wrapper {
+    max-width: 800px;
+    width: 100%;
+}
+
+.form-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.highlight-text {
+    background: var(--secondary-pink);
+    color: white;
+    padding: 0.2rem 0.8rem;
+    display: inline-block;
+    transform: rotate(-1deg);
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.9rem 1.2rem;
+    border: 3px solid #000;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    background: white;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px #000;
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.field-hint {
+    font-size: 0.85rem;
+    color: #FF4DAA;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.submit-btn {
+    background: #4CAF50;
+    color: white;
+    border: 4px solid #000;
+    border-radius: 12px;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-top: 1rem;
+    box-shadow: 6px 6px 0px #000;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px #000;
+}
+
+.login-link {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+.login-link a {
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 2rem 0 1.5rem;
+}
+
+.divider span {
+    background: var(--bg-cream);
+    padding: 0 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #ddd;
+}
+
+.social-login {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border: 3px solid #000;
+    border-radius: 12px;
+    background: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.social-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px #000;
+}
+
+.terms-text {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2rem;
+    line-height: 1.5;
+}
+
+.terms-text a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.terms-text a:hover {
+    text-decoration: underline;
+}
+
+.success-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    animation: scale-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scale-up {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
+.success-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.success-text {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+@media (max-width: 480px) {
+    .login-page {
+        padding: 1rem;
+    }
+
+    .form-title {
+        font-size: 2rem;
+    }
+
+    .brand-logo {
+        font-size: 2rem;
+    }
+}
