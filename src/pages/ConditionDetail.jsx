@@ -135,7 +135,6 @@ const ConditionDetail = ({ userProfile, onUpdateProfile }) => {
                         <div className="modal-content">
                             <button className="close-modal" onClick={() => setSelectedFoodForReplacement(null)}>×</button>
                             <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '2rem' }}>
-                                Better Options for <br />
                                 <span style={{ color: '#0047FF' }}>{selectedFoodForReplacement}</span>
                             </h3>
                             <div className="replacement-results">
