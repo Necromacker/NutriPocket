@@ -17,14 +17,20 @@ const Navbar = () => {
         </Link>
 
         <ul className="nav-links">
-          <li><Link to="/personalize">Personalize</Link></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/personalize">Health Planner</Link></li>
           <li><Link to="/scan">Smart Scan</Link></li>
-          <li><Link to="/deficiency">Deficiency Check</Link></li>
+          <li>
+            <Link to="/cook">
+              Cook with us
+              <span className="badge">NEW</span>
+            </Link>
+          </li>
         </ul>
 
         <div className="nav-actions">
           <a href="/login" className="login-btn">Login</a>
-          <button className="start-btn">Start For Free</button>
+          <button className="start-btn">Start for free</button>
         </div>
       </div>
     </nav>
