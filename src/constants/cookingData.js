@@ -522,5 +522,9 @@ export const RECIPES = [
     {
         "Recipe_id": "2840",
         "Recipe_title": "Strawberry, Ginger and Mint Sekanjabin"
+    },
+    {
+        "Recipe_id": "9001",
+        "Recipe_title": "Tofu Burger"
     }
 ];
