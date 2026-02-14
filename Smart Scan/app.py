@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 import google.generativeai as genai
 from dotenv import load_dotenv
 from PIL import Image
@@ -10,6 +11,14 @@ import io
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 # Configure Gemini API
 GOOGLE_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -72,18 +81,36 @@ def identify_food():
 
         # Prepare prompt
         prompt = f"""
-        Identify the food in this image. 
+        Identify the food in this image and write a short description of it.
+        
         I have a database of recipes with the following titles: {titles_str}
         
-        Analyze the image and described the food.
-        Then, check if this food matches any of the recipe titles I provided. 
-        If it matches (even if the name is slightly different but refers to the same dish), provide the exact 'matched_recipe_title' from my list.
-        If there is no match in my list, set 'matched_recipe_title' to null.
+        Compare your description of the specific food in the image with my list of recipe titles.
+        
+        Rules for matching:
+        1. Look for an exact match first.
+        2. If no exact match, look for a "closest match" based on the MAIN INGREDIENT or DISH TYPE.
+           - Example: If you see "Plain Rice" and my list has "Egyptian Rice with Vermicelli", MATCH IT.
+           - Example: If you see "Grilled Chicken" and my list has "Chicken Panne" or "Roasted Chicken", MATCH IT.
+           - Example: If you see "Beef Stew" and my list has "Egyptian Meat Stew", MATCH IT.
+        3. Your goal is to find the *best available nutrition data source* from my list, even if it's not the exact same variation.
+        
+        If you find a matching (or similar) recipe in my list, provide the EXACT 'matched_recipe_title' from my list.
+        Only set 'matched_recipe_title' to null if the food is completely unrelated to anything in my list.
+        
+        Regardless of matching, please estimate:
+        1. The nutritional content for one serving (Calories, Protein, Fat, Carbs).
+        2. A breakdown of likely ingredients with approximate quantities.
+        3. Key micronutrients present.
 
         Return the result as a JSON object with the following keys:
-        - identified_food: The common name of the food you identified.
-        - description: A short description of the food.
+        - identified_food: The common name.
+        - description: Short description.
         - matched_recipe_title: The exact title from my list that matches, or null.
+        - estimated_macros: {{ "calories": numeric, "protein": numeric_g, "fat": numeric_g, "carbs": numeric_g }}
+        - estimated_ingredients: [ {{ "name": string, "quantity": string, "cals": numeric, "p": string_protein_g }} ]
+        - micronutrients: [ string, string ] (e.g. "Vitamin A", "Iron")
+        - health_insight: One sentence insight.
         
         Return ONLY the JSON. Do not add any other text or markdown formatting.
         """
@@ -102,27 +129,68 @@ def identify_food():
             
             try:
                 result = json.loads(cleaned_text)
+                print(f"DEBUG: Gemini Identified: {result.get('identified_food')}")
+                print(f"DEBUG: Gemini Matched With: {result.get('matched_recipe_title')}")
+
+                # If there's a match, find the nutrition data from DB
+                matched_data = None
                 
-                # If there's a match, find the nutrition data
-                nutrition_info = None
                 if result.get('matched_recipe_title'):
                     for item in NUTRITION_DATA:
                         if item.get('recipeTitle') == result['matched_recipe_title']:
-                            nutrition_info = item
+                            matched_data = item
                             break
                 
-                result['nutrition_info'] = nutrition_info
-                return jsonify(result)
+                # Determine Macros Source
+                final_macros = {}
+                data_source_note = ""
+                
+                if matched_data:
+                    # Use DB Macros
+                    final_macros = {
+                        'calories': float(matched_data.get('Calories', 0)),
+                        'protein': float(matched_data.get('Protein (g)', 0)),
+                        'fat': float(matched_data.get('Total lipid (fat) (g)', 0)),
+                        'carbs': float(matched_data.get('Carbohydrate, by difference (g)', 0))
+                    }
+                    data_source_note = f" (Verified data for: {result['matched_recipe_title']})"
+                else:
+                    # Use Gemini Estimated Macros
+                    est = result.get('estimated_macros', {})
+                    final_macros = {
+                        'calories': est.get('calories', 0),
+                        'protein': est.get('protein', 0),
+                        'fat': est.get('fat', 0),
+                        'carbs': est.get('carbs', 0)
+                    }
+                    data_source_note = " (AI Estimated)"
+
+                # Construct response
+                response_data = {
+                    'identified_food': result.get('identified_food', 'Unknown Food'),
+                    'description': result.get('description', '') + data_source_note,
+                    'matched_recipe_title': result.get('matched_recipe_title'),
+                    'macros': final_macros,
+                    'ingredients': result.get('estimated_ingredients', []),
+                    'micronutrients': result.get('micronutrients', []),
+                    'health_score': 85, 
+                    'health_insight': result.get('health_insight', 'Balanced choice.')
+                }
+                
+                return jsonify(response_data)
 
             except json.JSONDecodeError:
-                # Fallback if specific JSON parsing fails, just return plain text structure or error
-                return jsonify({'food_name': cleaned_text, 'description': 'Could not parse detailed info', 'nutrition_info': None})
+                return jsonify({'error': 'Failed to parse API response', 'raw': cleaned_text}), 500
+            except Exception as e:
+                 return jsonify({'error': f'Error processing data: {str(e)}'}), 500
         else:
              return jsonify({'error': 'Could not identify food'}), 500
+
+
 
     except Exception as e:
         print(f"Error processing image: {e}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
