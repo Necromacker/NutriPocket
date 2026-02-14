@@ -33,7 +33,7 @@
 }
 
 .nav-links li a {
-    font-weight: 500;
+    font-weight: 400;
     color: var(--text-dark);
     transition: color 0.3s;
 }
@@ -43,13 +43,19 @@
 }
 
 .badge {
-    background: var(--secondary-pink);
+    background: #FF4D8D;
     color: white;
-    font-size: 0.65rem;
-    padding: 0.1rem 0.4rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
     border-radius: 4px;
-    margin-left: 4px;
+    margin-left: 6px;
     vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transform: rotate(-8deg);
+    display: inline-block;
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.2);
 }
 
 .nav-actions {
