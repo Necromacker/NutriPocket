@@ -43,7 +43,7 @@ const Hero = () => {
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="User" />
                             <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=50&h=50&fit=crop" alt="User" />
                         </div>
-                        <p><strong>5/5</strong> From <strong>2000+</strong> Hostel Students</p>
+                        <p><strong>4.9★</strong> average user satisfaction</p>
                     </div>
                     <button className="hero-btn">
                         Start For Free

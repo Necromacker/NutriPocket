@@ -3,24 +3,34 @@ import '../styles/FAQ.css';
 
 const FAQ_DATA = [
     {
-        question: "How accurate is the molecular food replacement?",
-        answer: "Our engine uses the FlavorDB dataset to match foods based on shared molecular profiles. While highly accurate scientifically, we recommend always checking for personal allergies."
+        question: "How does NutriPocket decide if a food is safe?",
+        answer:
+            "NutriPocket analyzes nutrients like sugar, fat, and sodium and compares them with your selected health conditions to generate a safety score."
     },
     {
-        question: "Does NutriPocket connect with fitness apps?",
-        answer: "Currently, NutriPocket focuses on deep nutritional intelligence. Integration with popular fitness trackers is planned for our Q3 update."
+        question: "What health conditions does NutriPocket support?",
+        answer:
+            "It supports conditions like diabetes, high blood pressure, heart health, iron deficiency, and weight management."
     },
     {
-        question: "Is my health data secure and private?",
-        answer: "Absolutely. Your health conditions and profiles are stored locally or encrypted. We never sell your personal health data to third parties."
+        question: "How does the food scanning feature work?",
+        answer:
+            "You upload a photo, and AI identifies the dish and matches it with nutrition data to calculate a health score instantly."
     },
     {
-        question: "How does the scanner identify nutrients?",
-        answer: "Our scanner uses advanced image recognition coupled with the Foodoscope API to identify food items and retrieve their micro-nutrient profiles in real-time."
+        question: "What does the health safety score mean?",
+        answer:
+            "Green means safe, yellow means moderate, and red means the food may not be suitable for your condition."
     },
     {
-        question: "Can I use NutriPocket for specific diets like Keto or Paleo?",
-        answer: "Yes! By setting your specific 'Foods to Avoid' and 'Foods to Eat' in the personalization section, you can tailor NutriPocket to any dietary methodology."
+        question: "Can NutriPocket suggest healthier alternatives?",
+        answer:
+            "Yes, it recommends safer food options with similar taste but better nutrition for your health needs."
+    },
+    {
+        question: "Is my health data secure?",
+        answer:
+            "Yes, all personal and health data is stored securely and never shared with third parties."
     }
 ];
 
