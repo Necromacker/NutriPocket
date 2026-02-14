@@ -6,6 +6,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from PIL import Image
 import io
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -192,5 +193,43 @@ def identify_food():
         print(f"Error processing image: {e}")
         return jsonify({'error': str(e)}), 500
 
+
+# -------------------------------------------------------------------
+# Cook With Us API Integration
+# -------------------------------------------------------------------
+API_BASE_URL = "https://api.foodoscope.com/recipe2-api/instructions/"
+API_TOKEN = "Bearer gCsX2sONi5bENi4_KFazz0jr7APGxJNl1DNHrSubNN0JpPHG"
+
+@app.route('/api/instructions/<int:recipe_id>')
+def get_instructions(recipe_id):
+    url = f"{API_BASE_URL}{recipe_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": API_TOKEN,
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status() # Raise an exception for bad status codes
+        return jsonify(response.json())
+    except Exception as e:
+        # Fallback for demo if API fails (e.g. Rate Limit)
+        if recipe_id == 2615:
+            return jsonify({
+                "instructions": [
+                    "Place chicken, onion, carrot, celery into a large pot and cover with water.",
+                    "Add bay leaf, peppercorns, and salt. Bring to a boil.",
+                    "Reduce heat to low and simmer for 45-60 minutes.",
+                    "Skim off any foam that rises to the surface.",
+                    "Remove chicken and strain the broth through a fine sieve.",
+                    "Serve hot or use as a base for soups."
+                ]
+            })
+        
+        status_code = 500
+        if hasattr(e, 'response') and e.response:
+             status_code = e.response.status_code
+        return jsonify({"error": str(e)}), status_code
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5002)

@@ -56,7 +56,7 @@ const SmartScan = () => {
         formData.append('image', photoFile);
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/identify', {
+            const response = await fetch('http://127.0.0.1:5002/identify', {
                 method: 'POST',
                 body: formData,
             });

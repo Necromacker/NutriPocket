@@ -44,7 +44,7 @@ const FEATURES = [
             'AI voice assistant guides you while cooking'
         ],
         color: '#00D1FF', // Blue
-        link: '/deficiency',
+        link: '/cook',
         image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800'
     }
 ];
@@ -77,13 +77,23 @@ const FeatureCards = () => {
                                     ))}
                                 </ul>
 
-                                <Link to={feature.link} className="card-cta">
-                                    Start For Free
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        <polyline points="12 5 19 12 12 19"></polyline>
-                                    </svg>
-                                </Link>
+                                {feature.link.startsWith('http') ? (
+                                    <a href={feature.link} target="_blank" rel="noopener noreferrer" className="card-cta">
+                                        Start Cooking
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </a>
+                                ) : (
+                                    <Link to={feature.link} className="card-cta">
+                                        Start For Free
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </Link>
+                                )}
                             </div>
 
                             <div className="card-visual">

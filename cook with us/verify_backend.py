@@ -3,7 +3,7 @@ import sys
 
 try:
     print("Testing backend API...")
-    response = requests.get("http://127.0.0.1:5000/api/instructions/2615")
+    response = requests.get("http://127.0.0.1:5002/api/instructions/2615")
     if response.status_code == 200:
         data = response.json()
         print("Success! Backend is reachable and returned data.")

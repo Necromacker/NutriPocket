@@ -6,6 +6,7 @@ import Personalize from './pages/Personalize';
 import ConditionDetail from './pages/ConditionDetail';
 import Scan from './pages/Scan';
 import Deficiency from './pages/Deficiency';
+import CookWithUs from './pages/CookWithUs';
 import './index.css';
 
 // Utility to scroll to top on route change
@@ -43,6 +44,7 @@ function App() {
               element={<Scan userProfile={userProfile} />}
             />
             <Route path="/deficiency" element={<Deficiency />} />
+            <Route path="/cook" element={<CookWithUs />} />
           </Routes>
         </main>
         <footer className="footer">
