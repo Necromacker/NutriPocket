@@ -1,0 +1,118 @@
+.feature-cards-section {
+    padding: 4rem 2rem;
+    background-color: var(--bg-cream);
+}
+
+.features-intro {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.cards-stack-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-card-wrapper {
+    position: sticky;
+    margin-bottom: 20vh;
+    width: 100%;
+
+}
+
+.feature-card {
+    padding: 2rem 3rem;
+    border-radius: 40px;
+    border: 4px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 460px;
+    /* Fixed height for uniformity */
+    color: #fff;
+    box-shadow: 12px 12px 0px #000;
+    gap: 4rem;
+}
+
+@media (max-width: 968px) {
+    .feature-card {
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+    }
+}
+
+.card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.feature-card h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+}
+
+.card-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    /* Light text */
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+.card-points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.card-points li {
+    font-weight: 400;
+    /* Light text, not bold */
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: #fff;
+    color: var(--primary-blue);
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    border: 3px solid #000;
+    width: fit-content;
+    transition: all 0.2s;
+}
+
+.card-cta:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px #000;
+}
+
+.card-visual {
+    flex: 1.2;
+    background: #fff;
+    border: 4px solid #000;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    height: auto;
+}
+
+.feature-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

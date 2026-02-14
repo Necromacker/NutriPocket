@@ -1,0 +1,85 @@
+.navbar {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    padding: 0.75rem 1.5rem;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-links li a {
+    font-weight: 500;
+    color: var(--text-dark);
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: var(--primary-blue);
+}
+
+.badge {
+    background: var(--secondary-pink);
+    color: white;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.login-btn {
+    font-weight: 500;
+}
+
+.start-btn {
+    background: var(--primary-blue);
+    color: white;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 4px 4px 0px 0px #0037B3;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #0037B3;
+}
+
+.start-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0px 0px #0037B3;
+}
+
+@media (max-width: 992px) {
+    .nav-links {
+        display: none;
+    }
+}
