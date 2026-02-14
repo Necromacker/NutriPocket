@@ -1,56 +1,79 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/CalorieGoal.css';
 
+const STORIES = [
+    {
+        id: 1,
+        name: 'Sarah Jenkins',
+        role: 'Busy Parent',
+        description: 'NutriPocket helped me find safer alternatives for my child\'s dairy allergy without sacrificing nutrition.',
+        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+        brand: 'Health Enthusiast'
+    },
+    {
+        id: 2,
+        name: 'David Chen',
+        role: 'Fitness Athlete',
+        description: 'The Smart Scan is a game-changer. I finally understand the real micro-impact of my protein sources.',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+        brand: 'Pro Athlete'
+    },
+    {
+        id: 3,
+        name: 'Elena Rodriguez',
+        role: 'Medical Student',
+        description: 'Using the Health Planner fixed my recurring energy crashes. It honestly feels scientific but simple.',
+        image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
+        brand: 'Med-User'
+    }
+];
+
 const CalorieGoal = () => {
-    const [calories, setCalories] = useState(2400);
-
-    const handleSliderChange = (e) => {
-        setCalories(e.target.value);
-    };
-
     return (
-        <section className="calorie-goal-section">
-            <div className="decorations">
-                <div className="wave-ripple"></div>
-                <div className="star-burst">✦</div>
+        <section className="stories-section">
+            <div className="section-header">
+                <h2 className="stories-title">SUCCESS <span className="highlight-tag">STORIES.</span></h2>
             </div>
 
-            <div className="goal-container">
-                <h2 className="goal-title">
-                    Set your daily <span className="highlight">GOAL</span> with NutriPocket
-                </h2>
-
-                <div className="goal-display">
-                    {calories} <span>kcal/Day</span>
+            <div className="stories-marquee">
+                <div className="stories-track">
+                    {/* First Set */}
+                    {STORIES.map((story) => (
+                        <div key={`set1-${story.id}`} className="story-card">
+                            <div className="story-visual">
+                                <img src={story.image} alt={story.name} className="story-img" />
+                            </div>
+                            <div className="story-content">
+                                <div className="brand-badge">
+                                    <span>★</span>
+                                    {story.brand}
+                                </div>
+                                <h3 className="story-name">{story.name}</h3>
+                                <p className="story-desc">
+                                    {story.description}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                    {/* Second Set for Loop */}
+                    {STORIES.map((story) => (
+                        <div key={`set2-${story.id}`} className="story-card">
+                            <div className="story-visual">
+                                <img src={story.image} alt={story.name} className="story-img" />
+                            </div>
+                            <div className="story-content">
+                                <div className="brand-badge">
+                                    <span>★</span>
+                                    {story.brand}
+                                </div>
+                                <h3 className="story-name">{story.name}</h3>
+                                <p className="story-desc">
+                                    {story.description}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-
-                <div className="slider-wrapper">
-                    <p className="slider-label">{calories.toLocaleString()} kcal Target</p>
-                    <input
-                        type="range"
-                        min="1200"
-                        max="4000"
-                        step="50"
-                        value={calories}
-                        onChange={handleSliderChange}
-                        className="calorie-slider"
-                    />
-                    <div className="slider-markers">
-                        <span>1200</span>
-                        <span>1800</span>
-                        <span>2400</span>
-                        <span>3000</span>
-                        <span>4000+</span>
-                    </div>
-                </div>
-
-                <button className="start-tracking-btn">
-                    Start Tracking Now
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </button>
             </div>
         </section>
     );
