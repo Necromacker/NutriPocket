@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/CookWithUs.css';
-import { Play, Pause, SkipForward, SkipBack, Loader2 } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Loader2, Search, Volume2, ArrowRight } from 'lucide-react';
+import { RECIPES } from '../constants/cookingData';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CookWithUs = () => {
     // State
-    const [recipeId, setRecipeId] = useState('2615');
+    const [recipeId, setRecipeId] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    // Core Logic State
     const [steps, setSteps] = useState([]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -13,10 +20,10 @@ const CookWithUs = () => {
     const [isSpeaking, setIsSpeaking] = useState(false);
 
     // Refs
-    // Use window.speechSynthesis directly, assuming browser support
     const synthesis = window.speechSynthesis;
     const utteranceRef = useRef(null);
     const stepRefs = useRef({});
+    const dropdownRef = useRef(null);
 
     // Effect to cancel speech on unmount
     useEffect(() => {
@@ -25,16 +32,46 @@ const CookWithUs = () => {
         };
     }, []);
 
-    // Scroll active step into view
+    // Handle outside click for dropdown
     useEffect(() => {
-        if (steps.length > 0 && stepRefs.current[currentStepIndex]) {
-            stepRefs.current[currentStepIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }, [currentStepIndex, steps]);
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
-    const fetchAndStart = async () => {
-        if (!recipeId) {
-            setError("Please enter a Recipe ID.");
+    const handleSearchChange = (e) => {
+        const term = e.target.value;
+        setSearchTerm(term);
+
+        if (term.length > 0) {
+            const matches = RECIPES.filter(r =>
+                r.Recipe_title.toLowerCase().startsWith(term.toLowerCase())
+            );
+            setFilteredRecipes(matches);
+            setShowDropdown(true);
+        } else {
+            setFilteredRecipes([]);
+            setShowDropdown(false);
+        }
+    };
+
+    const handleSelectRecipe = (recipe) => {
+        setSearchTerm(recipe.Recipe_title); // Set input to full title
+        setRecipeId(recipe.Recipe_id);      // Set hidden ID
+        setShowDropdown(false);             // Hide dropdown
+        setError('');                       // Clear errors
+        fetchAndStart(recipe.Recipe_id);
+    };
+
+    const fetchAndStart = async (overrideId = null) => {
+        const idToUse = overrideId || recipeId;
+
+        if (!idToUse) {
+            setError("Please select a valid recipe from the list.");
             return;
         }
 
@@ -43,8 +80,7 @@ const CookWithUs = () => {
         setError('');
 
         try {
-            // Updated to use the main backend port 5000
-            const response = await fetch(`http://127.0.0.1:5002/api/instructions/${recipeId}`);
+            const response = await fetch(`http://127.0.0.1:5002/api/instructions/${idToUse}`);
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
@@ -111,6 +147,23 @@ const CookWithUs = () => {
 
         const text = currentSteps[index];
         const utterance = new SpeechSynthesisUtterance(text);
+
+        // Select Voice - Prioritize "Google US English", "Samantha", or generally female voices
+        const voices = synthesis.getVoices();
+        const preferredVoice = voices.find(voice =>
+            voice.name.includes("Google US English") ||
+            voice.name.includes("Samantha") ||
+            voice.name.includes("Female") ||
+            voice.lang === 'en-US'
+        );
+
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
+
+        utterance.rate = 0.9; // Slightly slower
+        utterance.pitch = 1.0;
+
         utteranceRef.current = utterance;
 
         utterance.onend = () => {
@@ -128,13 +181,15 @@ const CookWithUs = () => {
 
     const handleNext = () => {
         if (currentStepIndex < steps.length - 1) {
-            speakStep(currentStepIndex + 1);
+            const nextIndex = currentStepIndex + 1;
+            speakStep(nextIndex);
         }
     };
 
     const handlePrev = () => {
         if (currentStepIndex > 0) {
-            speakStep(currentStepIndex - 1);
+            const prevIndex = currentStepIndex - 1;
+            speakStep(prevIndex);
         }
     };
 
@@ -152,7 +207,6 @@ const CookWithUs = () => {
                 setIsSpeaking(false);
             }
         } else {
-            // Not speaking, start current step
             speakStep(currentStepIndex);
         }
     };
@@ -160,59 +214,139 @@ const CookWithUs = () => {
     return (
         <div className="cook-page">
             <div className="cook-container">
-                <h1 className="cook-title">Chef's <span style={{ color: 'var(--secondary-pink)' }}>Voice</span></h1>
+                {/* Header Pills */}
+                <div className="simple-page-header">
+                    <motion.span
+                        className="title-pill pill-cook"
+                        initial={{ opacity: 0, y: -20, rotate: -10 }}
+                        animate={{ opacity: 1, y: 0, rotate: -3 }}
+                    >
+                        COOK
+                    </motion.span>
+                    <motion.span
+                        className="title-pill pill-with"
+                        initial={{ opacity: 0, y: -20, rotate: 5 }}
+                        animate={{ opacity: 1, y: 0, rotate: 2 }}
+                        transition={{ delay: 0.1 }}
+                    >
+                        WITH
+                    </motion.span>
+                    <motion.span
+                        className="title-pill pill-us"
+                        initial={{ opacity: 0, y: -20, rotate: 10 }}
+                        animate={{ opacity: 1, y: 0, rotate: -3 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        US
+                    </motion.span>
+                </div>
 
                 <div className="input-group">
-                    <input
-                        type="number"
-                        value={recipeId}
-                        onChange={(e) => setRecipeId(e.target.value)}
-                        placeholder="Enter Recipe ID (e.g., 2615)"
-                        className="recipe-input"
-                        onKeyDown={(e) => e.key === 'Enter' && fetchAndStart()}
-                    />
-                    <button
-                        onClick={fetchAndStart}
-                        disabled={isLoading}
-                        className="start-cooking-btn"
-                    >
-                        {isLoading ? <Loader2 className="animate-spin" /> : "Start Cooking"}
-                    </button>
+                    <div className="search-container" ref={dropdownRef}>
+                        <div style={{ position: 'relative', flex: 1 }}>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                placeholder="Search recipe (e.g. Rice...)"
+                                className="recipe-input"
+                                onFocus={() => searchTerm && setShowDropdown(true)}
+                            />
+                            <Search size={24} style={{
+                                position: 'absolute',
+                                right: '20px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                color: '#1A1E23',
+                                pointerEvents: 'none'
+                            }} />
+                        </div>
+
+                        {showDropdown && (
+                            <div className="search-dropdown">
+                                {filteredRecipes.length > 0 ? (
+                                    filteredRecipes.map((recipe) => (
+                                        <div
+                                            key={recipe.Recipe_id}
+                                            className="dropdown-item"
+                                            onClick={() => handleSelectRecipe(recipe)}
+                                        >
+                                            {recipe.Recipe_title}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="dropdown-empty" style={{ padding: '12px 20px', color: '#9ca3af', fontStyle: 'italic', textAlign: 'left' }}>
+                                        No recipes found matching "{searchTerm}"
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {error && <div className="error-msg">{error}</div>}
 
-                {steps.length > 0 && (
-                    <>
-                        <div className="controls">
-                            <button onClick={handlePrev} disabled={currentStepIndex === 0} className="control-btn">
-                                <SkipBack size={20} /> Prev
-                            </button>
-                            <button onClick={handlePauseResume} className={`control-btn ${!isPaused && isSpeaking ? 'active' : ''}`}>
-                                {isPaused || !isSpeaking ? <Play size={20} /> : <Pause size={20} />}
-                                {isPaused || !isSpeaking ? "Resume" : "Pause"}
-                            </button>
-                            <button onClick={handleNext} disabled={currentStepIndex === steps.length - 1} className="control-btn">
-                                Next <SkipForward size={20} />
-                            </button>
-                        </div>
-
-                        <div id="instructions-display">
-                            {steps.map((step, idx) => (
-                                <div
-                                    key={idx}
-                                    ref={el => stepRefs.current[idx] = el}
-                                    className={`step-card ${currentStepIndex === idx ? 'active' : ''}`}
-                                    onClick={() => speakStep(idx)}
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <div className="step-number">Step {idx + 1}</div>
-                                    <div className="step-text">{step}</div>
+                {/* Single Step Display */}
+                <AnimatePresence mode="wait">
+                    {steps.length > 0 && (
+                        <motion.div
+                            className="single-step-display"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                        >
+                            <div className="step-header">
+                                <div className="step-badge">
+                                    Step {currentStepIndex + 1} of {steps.length}
                                 </div>
-                            ))}
-                        </div>
-                    </>
-                )}
+                                {isSpeaking && !isPaused && (
+                                    <motion.div
+                                        animate={{ scale: [1, 1.2, 1] }}
+                                        transition={{ repeat: Infinity, duration: 1 }}
+                                        style={{ color: '#0050FF' }}
+                                    >
+                                        <Volume2 size={24} />
+                                    </motion.div>
+                                )}
+                            </div>
+
+                            <motion.div
+                                key={currentStepIndex}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="step-content"
+                            >
+                                {steps[currentStepIndex]}
+                            </motion.div>
+
+                            <div className="step-controls">
+                                <button
+                                    className="control-btn nav-btn"
+                                    onClick={handlePrev}
+                                    disabled={currentStepIndex === 0}
+                                >
+                                    <SkipBack size={20} /> Previous
+                                </button>
+
+                                <button
+                                    className="control-btn play-btn"
+                                    onClick={handlePauseResume}
+                                >
+                                    {isPaused || !isSpeaking ? <Play size={24} fill="white" /> : <Pause size={24} fill="white" />}
+                                </button>
+
+                                <button
+                                    className="control-btn nav-btn"
+                                    onClick={handleNext}
+                                    disabled={currentStepIndex === steps.length - 1}
+                                >
+                                    Next <ArrowRight size={20} />
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

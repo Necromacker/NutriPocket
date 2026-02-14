@@ -11,8 +11,8 @@ export const CONDITIONS = [
     },
     {
         id: 'lactose', label: 'Lactose Intolerant', icon: '🥛', description: 'Dairy-free molecular alternatives',
-        toEat: ['Almond Milk', 'Coconut Yogurt', 'Oat Milk', 'Hard Aged Cheese'],
-        toAvoid: ['Milk', 'Soft Cheese', 'Ice Cream', 'Butter']
+        toEat: ['Tempeh', 'Coconut Yogurt', 'Oat Milk', 'Hard Aged Cheese'],
+        toAvoid: ['Milk', 'Soft Cheese', 'Paneer', 'Butter']
     },
     {
         id: 'kidney', label: 'Kidney Issues', icon: '💧', description: 'Low potassium/sodium/phosphorus',

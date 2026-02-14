@@ -1,7 +1,6 @@
 .cook-page {
     min-height: 100vh;
-    padding-top: 80px;
-    /* Navbar height */
+    padding-top: 40px;
     background-color: var(--bg-cream);
     display: flex;
     flex-direction: column;
@@ -9,168 +8,243 @@
 }
 
 .cook-container {
-    background-color: white;
-    padding: 2.5rem;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    /* Soft shadow */
-    max-width: 700px;
+    background-color: transparent;
+    padding: 0;
+    max-width: 800px;
     width: 90%;
     text-align: center;
-    margin-top: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3.5rem;
 }
 
-.cook-title {
-    color: var(--text-dark);
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-    font-weight: 800;
-}
-
-.input-group {
+/* Simple Header - Adapted from Smart Scan */
+.simple-page-header {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.title-pill {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    padding: 10px 30px;
+    border: 4px solid #1A1E23;
+    border-radius: 16px;
+    box-shadow: 8px 8px 0px #1A1E23;
+    line-height: 1;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: -0.02em;
+}
+
+.pill-cook {
+    background-color: #FF4DAA;
+    /* Pink */
+    transform: rotate(-3deg);
+}
+
+.pill-with {
+    background-color: #0050FF;
+    /* Blue */
+    transform: rotate(3deg);
+}
+
+.pill-us {
+    background-color: #ffd700;
+    /* Yellow/Gold */
+    transform: rotate(-3deg);
+}
+
+/* Input Group */
+.input-group {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    border: 3px solid #1A1E23;
+    box-shadow: 8px 8px 0px #1A1E23;
+    width: 100%;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 15px;
+}
+
+.search-container {
+    flex: 1;
+    position: relative;
 }
 
 .recipe-input {
-    padding: 1rem 1.5rem;
+    width: 100%;
+    padding: 15px 20px;
     font-size: 1.1rem;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
-    width: 60%;
-    transition: border-color 0.3s ease;
     outline: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
 }
 
 .recipe-input:focus {
-    border-color: var(--secondary-pink);
+    border-color: #0050FF;
+}
+
+/* Dropdown */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #1A1E23;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.dropdown-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background-color: #f0fdf4;
+    /* Light green tint */
+    color: #1A1E23;
 }
 
 .start-cooking-btn {
-    padding: 1rem 2rem;
+    padding: 0 30px;
     font-size: 1.1rem;
-    font-weight: 700;
-    background-color: var(--secondary-pink);
-    color: white;
-    border: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    background-color: #00ca82;
+    /* Green accent */
+    color: #1A1E23;
+    border: 2px solid #1A1E23;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease;
+    box-shadow: 4px 4px 0px #1A1E23;
+    transition: all 0.2s;
 }
 
 .start-cooking-btn:hover {
-    background-color: #ff3366;
-    /* Slightly darker pink */
-    transform: translateY(-2px);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #1A1E23;
 }
 
 .start-cooking-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+    box-shadow: none;
     transform: none;
 }
 
-.status-message {
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-.loading {
-    color: #666;
+/* Single Step Display */
+.single-step-display {
+    background: white;
+    border: 3px solid #1A1E23;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 10px 10px 0px #1A1E23;
+    width: 100%;
+    min-height: 300px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
 }
 
-.error-msg {
-    color: #ef4444;
-    /* Red */
-    background: #fef2f2;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #fee2e2;
-}
-
-.controls {
-    margin-top: 2rem;
+.step-header {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem;
-    background: #f9fafb;
-    border-radius: 16px;
-    border: 1px solid #f3f4f6;
-}
-
-.control-btn {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    background-color: white;
-    color: var(--text-dark);
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #e0e0e0;
+    padding-bottom: 20px;
 }
 
-.control-btn:hover {
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
-}
-
-.control-btn.active {
-    background-color: var(--primary-blue);
+.step-badge {
+    background: #FF4DAA;
     color: white;
-    border-color: var(--primary-blue);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border: 2px solid #1A1E23;
 }
 
-#instructions-display {
-    margin-top: 2.5rem;
+.step-content {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #1A1E23;
+    margin-bottom: 40px;
     text-align: left;
 }
 
-.step-card {
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 16px;
-    border: 2px solid #f3f4f6;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+/* Controls inside the card */
+.step-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
-.step-card.active {
-    border-color: var(--secondary-pink);
-    background-color: #fff0f5;
-    /* Light pink tint */
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
-    transform: scale(1.02);
+.control-btn {
+    background: white;
+    border: 2px solid #1A1E23;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 3px 3px 0px #1A1E23;
 }
 
-.step-number {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
+.control-btn:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px #1A1E23;
 }
 
-.step-card.active .step-number {
-    color: var(--secondary-pink);
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
-.step-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--text-dark);
+.play-btn {
+    background: #0050FF;
+    color: white;
+}
+
+.nav-btn {
+    background: white;
+    color: #1A1E23;
+}
+
+.error-msg {
+    color: white;
+    background: #FF4D4D;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid #1A1E23;
+    margin-bottom: 20px;
+    font-weight: 700;
+    box-shadow: 4px 4px 0px #1A1E23;
 }

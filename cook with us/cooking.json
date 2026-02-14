@@ -1,0 +1,538 @@
+[
+    {
+        "Recipe_id": "2623",
+        "recipeTitle": "Quick and Easy Egyptian Chicken Broth"
+    },
+    {
+        "Recipe_id": "2627",
+        "recipeTitle": "Kofta"
+    },
+    {
+        "Recipe_id": "2631",
+        "recipeTitle": "Ta'ameya (Egyptian Falafel)"
+    },
+    {
+        "Recipe_id": "2634",
+        "recipeTitle": "The Perfect Egyptian Rice with Vermicelli"
+    },
+    {
+        "Recipe_id": "2635",
+        "recipeTitle": "Egyptian Meatballs"
+    },
+    {
+        "Recipe_id": "2636",
+        "recipeTitle": "Egyptian Lahma Bil Basal (Beef in Rich Onion Sauce)"
+    },
+    {
+        "Recipe_id": "2639",
+        "recipeTitle": "African-Style Oxtail Stew"
+    },
+    {
+        "Recipe_id": "2640",
+        "recipeTitle": "Jollof Rice"
+    },
+    {
+        "Recipe_id": "2641",
+        "recipeTitle": "Peri Peri African Chicken"
+    },
+    {
+        "Recipe_id": "2647",
+        "recipeTitle": "Best Hot Sauce"
+    },
+    {
+        "Recipe_id": "2610",
+        "recipeTitle": "Egyptian Lentil Soup"
+    },
+    {
+        "Recipe_id": "2611",
+        "recipeTitle": "Egyptian Green Beans with Carrots"
+    },
+    {
+        "Recipe_id": "2612",
+        "recipeTitle": "Egyptian Bamia"
+    },
+    {
+        "Recipe_id": "2613",
+        "recipeTitle": "Magpie's Easy Falafel Cakes"
+    },
+    {
+        "Recipe_id": "2614",
+        "recipeTitle": "Dukkah"
+    },
+    {
+        "Recipe_id": "2615",
+        "recipeTitle": "Om Ali"
+    },
+    {
+        "Recipe_id": "2616",
+        "recipeTitle": "Rice Pudding with Lemon Juice and Caramelized Onion (Egyptian Kishk)"
+    },
+    {
+        "Recipe_id": "2617",
+        "recipeTitle": "Couscous with Olives and Sun-Dried Tomato"
+    },
+    {
+        "Recipe_id": "2618",
+        "recipeTitle": "Fava Bean Breakfast Spread"
+    },
+    {
+        "Recipe_id": "2619",
+        "recipeTitle": "Koshary"
+    },
+    {
+        "Recipe_id": "2621",
+        "recipeTitle": "Fava Beans in Tahini Sauce"
+    },
+    {
+        "Recipe_id": "2720",
+        "recipeTitle": "African Cabbage Stew"
+    },
+    {
+        "Recipe_id": "2721",
+        "recipeTitle": "North African Beef Stew"
+    },
+    {
+        "Recipe_id": "2728",
+        "recipeTitle": "Peppermint Liqueur"
+    },
+    {
+        "Recipe_id": "2740",
+        "recipeTitle": "Beef Curry Soup"
+    },
+    {
+        "Recipe_id": "2742",
+        "recipeTitle": "South African Malvapoeding (Marshmallow Pudding)"
+    },
+    {
+        "Recipe_id": "2753",
+        "recipeTitle": "Beetroot Pancakes"
+    },
+    {
+        "Recipe_id": "2754",
+        "recipeTitle": "Chicken Casablanca"
+    },
+    {
+        "Recipe_id": "2757",
+        "recipeTitle": "Chakchouka (Shakshouka)"
+    },
+    {
+        "Recipe_id": "2767",
+        "recipeTitle": "Algerian Flafla (Bell Pepper Salad)"
+    },
+    {
+        "Recipe_id": "2786",
+        "recipeTitle": "H'rira Onctueuse a L'Agneau (Rich and Creamy Harira Soup)"
+    },
+    {
+        "Recipe_id": "2789",
+        "recipeTitle": "Algerian Kefta (Meatballs)"
+    },
+    {
+        "Recipe_id": "2790",
+        "recipeTitle": "Bissara"
+    },
+    {
+        "Recipe_id": "2796",
+        "recipeTitle": "Atlas Mountain Soup"
+    },
+    {
+        "Recipe_id": "2797",
+        "recipeTitle": "Chicken Tagine with Couscous"
+    },
+    {
+        "Recipe_id": "2798",
+        "recipeTitle": "Diced Lamb with Roasted Vegetables and Couscous"
+    },
+    {
+        "Recipe_id": "2805",
+        "recipeTitle": "Salmon with Harissa"
+    },
+    {
+        "Recipe_id": "2806",
+        "recipeTitle": "Harissa"
+    },
+    {
+        "Recipe_id": "2812",
+        "recipeTitle": "Ethiopian Cabbage and Potato Dish (Atkilt)"
+    },
+    {
+        "Recipe_id": "2814",
+        "recipeTitle": "Doro Wat"
+    },
+    {
+        "Recipe_id": "2816",
+        "recipeTitle": "Mombasa Pumpkin Dessert"
+    },
+    {
+        "Recipe_id": "2817",
+        "recipeTitle": "Ethiopian Chicken"
+    },
+    {
+        "Recipe_id": "2834",
+        "recipeTitle": "Ethiopian Firfir with Dried Beef (Quanta Firfir)"
+    },
+    {
+        "Recipe_id": "2835",
+        "recipeTitle": "Kik Wat (Ethiopian Red Lentil Stew)"
+    },
+    {
+        "Recipe_id": "2837",
+        "recipeTitle": "Iranian _ Persian Salad Shirazi"
+    },
+    {
+        "Recipe_id": "2838",
+        "recipeTitle": "Pomegranate Stew with Chicken (Khoresh Fesenjan)"
+    },
+    {
+        "Recipe_id": "2839",
+        "recipeTitle": "Lamb and Asparagus Stew"
+    },
+    {
+        "Recipe_id": "2849",
+        "recipeTitle": "Persian Rice"
+    },
+    {
+        "Recipe_id": "2852",
+        "recipeTitle": "Ginger Sekanjabin"
+    },
+    {
+        "Recipe_id": "2854",
+        "recipeTitle": "Persian Lentil Stew"
+    },
+    {
+        "Recipe_id": "2856",
+        "recipeTitle": "Mast-o-Khiar"
+    },
+    {
+        "Recipe_id": "2696",
+        "recipeTitle": "Moroccan Semolina Soup with Milk, Anise Seeds, and Honey"
+    },
+    {
+        "Recipe_id": "2703",
+        "recipeTitle": "Mushroom and Chickpea Tagine"
+    },
+    {
+        "Recipe_id": "2704",
+        "recipeTitle": "Harira"
+    },
+    {
+        "Recipe_id": "2717",
+        "recipeTitle": "Senegalese Chicken Yassa"
+    },
+    {
+        "Recipe_id": "2719",
+        "recipeTitle": "Egusi Soup"
+    },
+    {
+        "Recipe_id": "2723",
+        "recipeTitle": "Vegan African Stew"
+    },
+    {
+        "Recipe_id": "2733",
+        "recipeTitle": "Curry Beef Soup"
+    },
+    {
+        "Recipe_id": "2735",
+        "recipeTitle": "South African Lamb Sosaties(Kebabs)"
+    },
+    {
+        "Recipe_id": "2736",
+        "recipeTitle": "Bobotie"
+    },
+    {
+        "Recipe_id": "2738",
+        "recipeTitle": "South African Sugar Bean Soup"
+    },
+    {
+        "Recipe_id": "2739",
+        "recipeTitle": "Cape Malay Pickled Fish"
+    },
+    {
+        "Recipe_id": "2741",
+        "recipeTitle": "South African Bobotie"
+    },
+    {
+        "Recipe_id": "2745",
+        "recipeTitle": "Gisela's Butternut Squash Soup"
+    },
+    {
+        "Recipe_id": "2749",
+        "recipeTitle": "Chocolate Fondue L'Afrique"
+    },
+    {
+        "Recipe_id": "2756",
+        "recipeTitle": "Ghorayebah (Butter Biscuits for Eid)"
+    },
+    {
+        "Recipe_id": "2759",
+        "recipeTitle": "Algerian Bouzgene Berber Bread with Roasted Pepper Sauce"
+    },
+    {
+        "Recipe_id": "2762",
+        "recipeTitle": "Vegetable Tagine"
+    },
+    {
+        "Recipe_id": "2763",
+        "recipeTitle": "Couscous de Mouton Tout Simple (Moroccan Mutton Couscous)"
+    },
+    {
+        "Recipe_id": "2764",
+        "recipeTitle": "Tunisian Harissa"
+    },
+    {
+        "Recipe_id": "2766",
+        "recipeTitle": "Upside Down (Maqluba)"
+    },
+    {
+        "Recipe_id": "2768",
+        "recipeTitle": "Arabian Rose Water Pudding (Muhalbiyah)"
+    },
+    {
+        "Recipe_id": "2769",
+        "recipeTitle": "Tunisian Lamb with Saffron (Keleya Zaara)"
+    },
+    {
+        "Recipe_id": "2770",
+        "recipeTitle": "Khobz el Dar (Algerian Semolina Bread)"
+    },
+    {
+        "Recipe_id": "2778",
+        "recipeTitle": "Traditional Baba Ghanoush"
+    },
+    {
+        "Recipe_id": "2780",
+        "recipeTitle": "Refreshing Lentil Salad"
+    },
+    {
+        "Recipe_id": "2782",
+        "recipeTitle": "Mamool or Ma'amoul"
+    },
+    {
+        "Recipe_id": "2787",
+        "recipeTitle": "Namoora (Basboosa)"
+    },
+    {
+        "Recipe_id": "2788",
+        "recipeTitle": "El Mestouk"
+    },
+    {
+        "Recipe_id": "2791",
+        "recipeTitle": "Middle Eastern White Beans"
+    },
+    {
+        "Recipe_id": "2793",
+        "recipeTitle": "25-Minute Tunisian Vegetable Couscous"
+    },
+    {
+        "Recipe_id": "2799",
+        "recipeTitle": "Tunisian Soup"
+    },
+    {
+        "Recipe_id": "2801",
+        "recipeTitle": "Dziriat (Algerian Almond Tarts)"
+    },
+    {
+        "Recipe_id": "2802",
+        "recipeTitle": "The Shorba Freekeh of Algeria"
+    },
+    {
+        "Recipe_id": "2807",
+        "recipeTitle": "Ethiopian Cabbage Dish"
+    },
+    {
+        "Recipe_id": "2808",
+        "recipeTitle": "Berbere Spice Blend"
+    },
+    {
+        "Recipe_id": "2810",
+        "recipeTitle": "Qumbe (East African Coconut Candy)"
+    },
+    {
+        "Recipe_id": "2811",
+        "recipeTitle": "Sambusa"
+    },
+    {
+        "Recipe_id": "2813",
+        "recipeTitle": "Ethiopian Vegetable Bowl"
+    },
+    {
+        "Recipe_id": "2832",
+        "recipeTitle": "Eba"
+    },
+    {
+        "Recipe_id": "2846",
+        "recipeTitle": "Persian Sabzi Polo (Herb Rice with Fava Beans)"
+    },
+    {
+        "Recipe_id": "2694",
+        "recipeTitle": "Lamb Tagine"
+    },
+    {
+        "Recipe_id": "2695",
+        "recipeTitle": "Moroccan Lamb Kabobs"
+    },
+    {
+        "Recipe_id": "2697",
+        "recipeTitle": "Moroccan Chicken Tagine"
+    },
+    {
+        "Recipe_id": "2698",
+        "recipeTitle": "Moroccan Meat Cigars"
+    },
+    {
+        "Recipe_id": "2702",
+        "recipeTitle": "Moroccan Peach Roasted Chicken"
+    },
+    {
+        "Recipe_id": "2705",
+        "recipeTitle": "Lamb Chops with Preserved Lemon (Moroccan Style)"
+    },
+    {
+        "Recipe_id": "2709",
+        "recipeTitle": "Spicy African Yam Soup"
+    },
+    {
+        "Recipe_id": "2710",
+        "recipeTitle": "Senegalese Riz Gras"
+    },
+    {
+        "Recipe_id": "2716",
+        "recipeTitle": "Saharan West African Peanut and Pineapple Soup"
+    },
+    {
+        "Recipe_id": "2718",
+        "recipeTitle": "African Turkey Stew"
+    },
+    {
+        "Recipe_id": "2722",
+        "recipeTitle": "African Sweet Potato and Peanut Soup"
+    },
+    {
+        "Recipe_id": "2725",
+        "recipeTitle": "Powerhouse African Yam Stew"
+    },
+    {
+        "Recipe_id": "2726",
+        "recipeTitle": "Tomato Bredie"
+    },
+    {
+        "Recipe_id": "2729",
+        "recipeTitle": "Zimbabwean Chicken and Vegetable Soup"
+    },
+    {
+        "Recipe_id": "2734",
+        "recipeTitle": "Vary Aminanana (Collard Greens and Rice)"
+    },
+    {
+        "Recipe_id": "2744",
+        "recipeTitle": "Spicy Potato Noodles (Bataka Sev)"
+    },
+    {
+        "Recipe_id": "2747",
+        "recipeTitle": "South African Brown Pudding"
+    },
+    {
+        "Recipe_id": "2750",
+        "recipeTitle": "Milk Tart"
+    },
+    {
+        "Recipe_id": "2760",
+        "recipeTitle": "Tajin Sibnekh (Tunisian Chicken and Eggs)"
+    },
+    {
+        "Recipe_id": "2765",
+        "recipeTitle": "Algerian Carrots"
+    },
+    {
+        "Recipe_id": "2772",
+        "recipeTitle": "Algerian Couscous"
+    },
+    {
+        "Recipe_id": "2773",
+        "recipeTitle": "Arabic Green Beans with Beef"
+    },
+    {
+        "Recipe_id": "2776",
+        "recipeTitle": "Le Marriage, Alfredo Algerie"
+    },
+    {
+        "Recipe_id": "2779",
+        "recipeTitle": "Moroccan Sardine Meatballs"
+    },
+    {
+        "Recipe_id": "2781",
+        "recipeTitle": "Dersa (Algerian Chile Paste)"
+    },
+    {
+        "Recipe_id": "2783",
+        "recipeTitle": "Tahini Salad"
+    },
+    {
+        "Recipe_id": "2785",
+        "recipeTitle": "Tastira (Tunisian Fried Peppers and Eggs)"
+    },
+    {
+        "Recipe_id": "2794",
+        "recipeTitle": "Harissa Chicken"
+    },
+    {
+        "Recipe_id": "2803",
+        "recipeTitle": "Tajine de Poulet aux Carottes et Patates Douces (Chicken and Sweet Potato Tagine)"
+    },
+    {
+        "Recipe_id": "2804",
+        "recipeTitle": "Lamb Merguez Sausage Patties"
+    },
+    {
+        "Recipe_id": "2809",
+        "recipeTitle": "Ugandan Kabobs"
+    },
+    {
+        "Recipe_id": "2822",
+        "recipeTitle": "Ethiopian Spiced Cottage Cheese"
+    },
+    {
+        "Recipe_id": "2823",
+        "recipeTitle": "Key Sir Alicha (Ethiopian Beets and Potatoes)"
+    },
+    {
+        "Recipe_id": "2825",
+        "recipeTitle": "Berbere (Ethiopian Spice)"
+    },
+    {
+        "Recipe_id": "2826",
+        "recipeTitle": "Doro Wat: Ethiopian Chicken Dish"
+    },
+    {
+        "Recipe_id": "2828",
+        "recipeTitle": "Tomato Chutney"
+    },
+    {
+        "Recipe_id": "2829",
+        "recipeTitle": "Injera"
+    },
+    {
+        "Recipe_id": "2830",
+        "recipeTitle": "Gomen Wat"
+    },
+    {
+        "Recipe_id": "2836",
+        "recipeTitle": "Tikil Gomen (Ethiopian Cabbage)"
+    },
+    {
+        "Recipe_id": "2840",
+        "recipeTitle": "Strawberry, Ginger and Mint Sekanjabin"
+    },
+    {
+        "Recipe_id": "2748",
+        "recipeTitle": "South African Instant Milk Tart"
+    },
+    {
+        "Recipe_id": "2752",
+        "recipeTitle": "Best Bobotie"
+    },
+    {
+        "Recipe_id": "2771",
+        "recipeTitle": "Poulet Roti a l'Algerienne (Algerian Roast Chicken)"
+    }
+]

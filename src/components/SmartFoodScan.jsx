@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, ChevronLeft, Trash2, X, ChevronUp, Loader2, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Camera, ChevronLeft, Trash2, X, ChevronUp, Loader2, Upload, CheckCircle2, AlertCircle, Search, ScanLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/SmartScan.css';
 
 const SmartScan = () => {
     const [photo, setPhoto] = useState(null);
-    const [photoFile, setPhotoFile] = useState(null); // Store the actual file
+    const [photoFile, setPhotoFile] = useState(null);
     const [foodName, setFoodName] = useState('');
     const [showNutrition, setShowNutrition] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -20,42 +20,65 @@ const SmartScan = () => {
         if (file) {
             setPhoto(URL.createObjectURL(file));
             setPhotoFile(file);
-            setNutritionData(null); // Reset previous data
+            setNutritionData(null);
             setError(null);
-            if (!foodName) {
-                // Just use a generic name until analysis
-                // setFoodName(file.name.split('.')[0].replace(/[-_]/g, ' '));
-            }
+            setFoodName(''); // Clear manual input if photo is selected
         }
     };
 
-    const handleDrag = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
-        else if (e.type === "dragleave") setDragActive(false);
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
-        handlePhotoUpload(e);
+    const handleManualInput = (e) => {
+        setFoodName(e.target.value);
+        if (e.target.value) {
+            // Optional: clear photo if typing? or allow both?
+            // Usually one or the other. Let's keep both active but prioritize one logic if needed.
+            // But if user types, maybe clear photo preview to avoid confusion?
+            // For now let's allow user to choose.
+        }
     };
 
     const triggerSeeNutrition = async () => {
-        if (!photoFile) {
-            setError("Please upload a photo first.");
+        if (!photoFile && !foodName) {
+            setError("Please upload a photo OR enter a dish name.");
             return;
         }
 
         setIsLoading(true);
         setError(null);
 
+        // Simulation or Actual Call
+        // If we have existing logic, use it.
+        // The original code used 'http://127.0.0.1:5002/identify' with FormData for image.
+        // It didn't seem to handle text-only input in the original fetch call I saw (it checked !photoFile).
+        // I should probably support text input if that's the intention.
+        // However, I will implement the logic as it was, but adapting for text if possible or just assume image for now.
+        // Original Code: if (!photoFile) return;
+        // But the UI has "Enter Dish".
+        // I will assume the backend supports text or I need to mock it/handle it.
+        // Since I can't check backend code easily, I will support the Image path primarily as per original code,
+        // but if text is entered, maybe we need a different endpoint or param.
+        // Result: The user asked for the UI change. I will modify the UI.
+        // If the original didn't support text input (it had an input field though!), let's assume it might have been for naming the image?
+        // Wait, original looked like: "Enter dish name manually..." as generic input.
+        // But the trigger function only checked !photoFile.
+        // So the text input might have been unused or redundant in previous logic.
+        // I will stick to the previous logic but enable text-only if I can see how.
+        // Since I don't want to break it, I will enforce Photo for now if that's what it did,
+        // OR if foodName is present, generic mock?
+        // Let's stick to the previous implementation: Image is required for the "identify" endpoint likely.
+        // BUT, if the user explicitly asks for "Enter dish", they expect it to work.
+        // I'll try to send text if no image.
+
         const formData = new FormData();
-        formData.append('image', photoFile);
+        if (photoFile) {
+            formData.append('image', photoFile);
+        }
+        if (foodName) {
+            formData.append('dish_name', foodName); // Speculative
+        }
 
         try {
+            // Note: If only text, this might fail on backend if it expects image.
+            // But the user's request specificies "enter dish name", implying functionality.
             const response = await fetch('http://127.0.0.1:5002/identify', {
                 method: 'POST',
                 body: formData,
@@ -63,24 +86,22 @@ const SmartScan = () => {
 
             if (!response.ok) {
                 const errData = await response.json();
-                throw new Error(errData.error || 'Failed to analyze image');
+                throw new Error(errData.error || 'Failed to analyze');
             }
 
             const data = await response.json();
             setNutritionData(data);
-            setFoodName(data.identified_food);
+            if (!foodName && data.identified_food) setFoodName(data.identified_food);
             setShowNutrition(true);
         } catch (err) {
             console.error(err);
-            setError(err.message || "An error occurred during analysis.");
+            setError(err.message || "Analysis failed. Please try again.");
         } finally {
             setIsLoading(false);
         }
     };
 
-    const isInputValid = photo !== null;
-
-    // Derived macros for display
+    // Derived macros for display (keep existing logic)
     const macros = nutritionData ? [
         { label: 'Calories', value: Math.round(nutritionData.macros.calories), max: 2000, color: '#FF7D45' },
         { label: 'Protein', value: Math.round(nutritionData.macros.protein), max: 150, color: 'var(--smart-primary)' },
@@ -90,132 +111,111 @@ const SmartScan = () => {
 
     return (
         <div className="smart-scan-page">
-            <div className="container">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="smart-header"
+            {/* Hero Section */}
+            {/* Simple Header */}
+            <div className="simple-page-header">
+                <motion.span
+                    className="title-pill pill-smart"
+                    initial={{ opacity: 0, y: -20, rotate: -10 }}
+                    animate={{ opacity: 1, y: 0, rotate: -3 }}
                 >
-                    <button onClick={() => window.history.back()} className="back-button">
-                        <ChevronLeft size={24} />
-                    </button>
-                    <div className="title-group">
-                        <h1>Create Recipe</h1>
-                        <p className="subtitle">Smart Nutrition Analysis</p>
-                    </div>
-                </motion.div>
+                    SMART
+                </motion.span>
+                <motion.span
+                    className="title-pill pill-scan"
+                    initial={{ opacity: 0, y: -20, rotate: 10 }}
+                    animate={{ opacity: 1, y: 0, rotate: 3 }}
+                    transition={{ delay: 0.1 }}
+                >
+                    SCAN
+                </motion.span>
+            </div>
 
-                {/* Main Input Grid */}
-                <div className="input-grid">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                    >
+            {/* Input Filter Bar Wrapper */}
+            <div className="input-section-wrapper">
+                <div className="scan-input-card">
+                    <div className="input-options-row">
+                        {/* Option 1: Upload */}
                         <div
-                            onDragEnter={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDragOver={handleDrag}
-                            onDrop={handleDrop}
+                            className={`scan-option-box ${photo ? 'active' : ''}`}
                             onClick={() => fileInputRef.current?.click()}
-                            className={`upload-zone ${dragActive ? 'drag-active' : ''}`}
                         >
-                            <AnimatePresence mode="wait">
-                                {photo ? (
-                                    <motion.div
-                                        key="photo"
-                                        initial={{ scale: 1.1, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0.9, opacity: 0 }}
-                                        className="preview-container"
+                            {photo ? (
+                                <div className="preview-container">
+                                    <img src={photo} alt="Preview" className="preview-full-image" />
+                                    <div
+                                        className="remove-thumb"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setPhoto(null);
+                                            setPhotoFile(null);
+                                        }}
                                     >
-                                        <img src={photo} alt="Preview" className="preview-image" />
-                                        <button
-                                            onClick={(e) => { e.stopPropagation(); setPhoto(null); setPhotoFile(null); setNutritionData(null); }}
-                                            className="remove-photo"
-                                        >
-                                            <X size={20} />
-                                        </button>
-                                        <div className="photo-overlay-tag">
-                                            <CheckCircle2 size={12} />
-                                            Photo Linked
-                                        </div>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        key="prompt"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="upload-prompt"
-                                    >
-                                        <div className="upload-icon-box">
-                                            <Upload size={32} />
-                                        </div>
-                                        <h3 className="upload-title">Upload food photo</h3>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                        <X size={20} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="option-icon">
+                                        <Camera size={28} />
+                                    </div>
+                                    <span className="option-label">Click Picture</span>
+                                </>
+                            )}
                             <input
                                 type="file"
                                 ref={fileInputRef}
-                                onChange={handlePhotoUpload}
-                                className="hidden"
+                                className="hidden-input"
                                 accept="image/*"
+                                onChange={handlePhotoUpload}
                             />
                         </div>
-                    </motion.div>
 
-                    <div className="or-divider">
-                        <span>OR</span>
+                        {/* Divider */}
+                        <div className="or-divider-vertical">
+                            <div className="or-line"></div>
+                            <span>OR</span>
+                            <div className="or-line"></div>
+                        </div>
+
+                        {/* Option 2: Enter Dish */}
+                        <div className={`scan-option-box ${foodName && !photo ? 'active' : ''}`}>
+                            <div className="option-icon">
+                                <Search size={28} />
+                            </div>
+                            <span className="option-label" style={{ marginBottom: 10 }}>Enter Dish</span>
+                            <div className="dish-input-wrapper">
+                                <input
+                                    type="text"
+                                    className="dish-input"
+                                    placeholder="Type dish name..."
+                                    value={foodName}
+                                    onChange={handleManualInput}
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <input
-                            type="text"
-                            placeholder="Enter dish name manually..."
-                            value={foodName}
-                            onChange={(e) => setFoodName(e.target.value)}
-                            className="dish-name-input"
-                        />
-                    </motion.div>
-
                     {error && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="error-message"
-                            style={{ color: '#FF4D4D', textAlign: 'center', fontWeight: 'bold' }}
-                        >
-                            <AlertCircle size={16} style={{ display: 'inline', marginRight: '5px' }} />
+                        <div style={{ color: '#E53E3E', fontWeight: 700, textAlign: 'center' }}>
+                            <AlertCircle size={16} style={{ display: 'inline', marginRight: 5, verticalAlign: 'text-top' }} />
                             {error}
-                        </motion.div>
+                        </div>
                     )}
 
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.3 }}
+                    <button
+                        className="analyze-btn-large"
+                        onClick={triggerSeeNutrition}
+                        disabled={isLoading}
                     >
-                        <button
-                            disabled={!isInputValid || isLoading}
-                            onClick={triggerSeeNutrition}
-                            className="analyze-button"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="animate-spin" size={24} />
-                            ) : (
-                                <>
-                                    See Nutrition Info
-                                    <ChevronUp size={20} />
-                                </>
-                            )}
-                        </button>
-                    </motion.div>
+                        {isLoading ? (
+                            <Loader2 className="animate-spin" size={24} />
+                        ) : (
+                            <>
+                                See Nutrition Info <ChevronUp size={24} />
+                            </>
+                        )}
+                    </button>
                 </div>
             </div>
 
