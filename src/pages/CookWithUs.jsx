@@ -136,6 +136,46 @@ const CookWithUs = () => {
         setError('');
     };
 
+    const getPreferredVoice = () => {
+        const voices = synthesis.getVoices();
+
+        // Priority List for Female Voices
+        const priorities = [
+            "Google US English", // Very natural female
+            "Samantha", // Mac default female
+            "Microsoft Zira", // Windows default female
+            "Google UK English Female",
+            "Karen", // Mac
+            "Moira", // Mac
+            "Tessa", // Mac
+            "Veena", // Mac
+        ];
+
+        // 1. Try exact matches from priority list
+        for (const name of priorities) {
+            const found = voices.find(v => v.name === name);
+            if (found) return found;
+        }
+
+        // 2. Try partial matches for priority list
+        for (const name of priorities) {
+            const found = voices.find(v => v.name.includes(name));
+            if (found) return found;
+        }
+
+        // 3. Fallback to any explicitly labeled female voice
+        const femaleVoice = voices.find(v =>
+            (v.name.toLowerCase().includes("female") ||
+                v.name.toLowerCase().includes("woman") ||
+                v.name.toLowerCase().includes("girl")) &&
+            v.lang.startsWith("en")
+        );
+        if (femaleVoice) return femaleVoice;
+
+        // 4. Critical Fallback: Any English US voice
+        return voices.find(v => v.lang === "en-US") || voices[0];
+    };
+
     const speakStep = (index, currentSteps = steps) => {
         if (!synthesis) return;
         if (index < 0 || index >= currentSteps.length) return;
@@ -148,21 +188,16 @@ const CookWithUs = () => {
         const text = currentSteps[index];
         const utterance = new SpeechSynthesisUtterance(text);
 
-        // Select Voice - Prioritize "Google US English", "Samantha", or generally female voices
-        const voices = synthesis.getVoices();
-        const preferredVoice = voices.find(voice =>
-            voice.name.includes("Google US English") ||
-            voice.name.includes("Samantha") ||
-            voice.name.includes("Female") ||
-            voice.lang === 'en-US'
-        );
-
+        const preferredVoice = getPreferredVoice();
         if (preferredVoice) {
             utterance.voice = preferredVoice;
         }
 
-        utterance.rate = 0.9; // Slightly slower
-        utterance.pitch = 1.0;
+        utterance.rate = 0.95; // Slightly slower than default for clarity
+        // If we found a specific female voice, use normal pitch. 
+        // If we fell back to a generic one, slight bump might help perceieved gender, but risky.
+        // Let's stick to 1.05 for a slightly lighter tone.
+        utterance.pitch = 1.05;
 
         utteranceRef.current = utterance;
 
