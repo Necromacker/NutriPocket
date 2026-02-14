@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Voice Assistant</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="number"] {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 70%;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #instructions-display {
+            margin-top: 2rem;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+        
+        .step {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .step.active {
+            background-color: #e6f2ff;
+            border-left-color: #0056b3;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+            justify-content: space-between;
+        }
+        
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Voice Assistant</h1>
+        
+        <div class="input-group">
+            <input type="number" id="recipe-id" placeholder="Enter Recipe ID (e.g., 2615)" value="2615">
+            <button id="start-btn">Start Cooking</button>
+        </div>
+
+        <div id="status-message"></div>
+
+        <div class="controls" id="controls">
+            <button id="prev-step">Previous Step</button>
+            <button id="pause-resume">Pause/Resume</button>
+            <button id="next-step">Next Step</button>
+        </div>
+
+        <div id="instructions-display"></div>
+    </div>
+
+    <script>
+        const recipeIdInput = document.getElementById('recipe-id');
+        const startBtn = document.getElementById('start-btn');
+        const statusMessage = document.getElementById('status-message');
+        const instructionsDisplay = document.getElementById('instructions-display');
+        const controls = document.getElementById('controls');
+        const prevStepBtn = document.getElementById('prev-step');
+        const nextStepBtn = document.getElementById('next-step');
+        const pauseResumeBtn = document.getElementById('pause-resume');
+
+        let steps = [];
+        let currentStepIndex = 0;
+        let isPaused = false;
+        let synthesis = window.speechSynthesis;
+        let currentUtterance = null;
+
+        startBtn.addEventListener('click', fetchAndStart);
+        
+        // Add Enter key support
+        recipeIdInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                fetchAndStart();
+            }
+        });
+
+        async function fetchAndStart() {
+            const recipeId = recipeIdInput.value;
+            if (!recipeId) {
+                showError("Please enter a Recipe ID.");
+                return;
+            }
+
+            resetState();
+            showLoading("Fetching instructions...");
+
+            try {
+                const response = await fetch(`/api/instructions/${recipeId}`);
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Inspecting the payload structure based on user request example
+                console.log("API Response:", data);
+                
+                // Assuming data is "instructions" which might be a list of strings or objects.
+                // If it's the raw response body from the user example:
+                // It seems to be just the instructions list directly or wrapped?
+                // Let's assume it returns { "instructions": [...] } or just [...]
+                // The provided user code printed `response.json()`.
+                // If the user's snippet is correct, data IS the instructions.
+                
+                // Let's try to normalize.
+                let instructions = [];
+                if (Array.isArray(data)) {
+                    instructions = data; // Usually recipe instructions are steps
+                } else if (data.instructions && Array.isArray(data.instructions)) {
+                    instructions = data.instructions;
+                } else if (typeof data === 'object') {
+                     // Maybe it's a dict with step keys? Let's just try to parse common formats
+                     // For now, let's assume it's data itself if array, or check known keys.
+                     // A lot of APIs return { steps: [...] }
+                     if (data.steps) instructions = data.steps;
+                     else {
+                         // Fallback: try to convert object values to array or just treat as single
+                         instructions = [JSON.stringify(data)]; 
+                     }
+                }
+                
+                // If instructions are objects (common in Spoonacular/Foodoscope), extract 'step' property
+                steps = instructions.map(item => {
+                    if (typeof item === 'string') return item;
+                    if (item.step) return item.step; // Common structure
+                    return JSON.stringify(item);
+                });
+                
+                if (steps.length === 0) {
+                    showError("No instructions found for this recipe.");
+                    return;
+                }
+
+                displayInstructions();
+                statusMessage.textContent = ""; // Clear loading
+                controls.style.display = 'flex';
+                
+                // Start speaking the first step
+                speakStep(0);
+
+            } catch (error) {
+                console.error("Error:", error);
+                showError(`Failed to load recipe: ${error.message}`);
+            }
+        }
+        
+        function resetState() {
+            synthesis.cancel();
+            steps = [];
+            currentStepIndex = 0;
+            isPaused = false;
+            instructionsDisplay.innerHTML = '';
+            controls.style.display = 'none';
+            statusMessage.textContent = '';
+            startBtn.disabled = false;
+        }
+
+        function showLoading(msg) {
+            statusMessage.innerHTML = `<div class="loading">${msg}</div>`;
+            startBtn.disabled = true;
+        }
+
+        function showError(msg) {
+            statusMessage.innerHTML = `<div class="error">${msg}</div>`;
+            startBtn.disabled = false;
+        }
+
+        function displayInstructions() {
+            instructionsDisplay.innerHTML = steps.map((step, index) => `
+                <div class="step" id="step-${index}">
+                    <strong>Step ${index + 1}:</strong> ${step}
+                </div>
+            `).join('');
+        }
+
+        function updateActiveStep(index) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            const activeEl = document.getElementById(`step-${index}`);
+            if (activeEl) {
+                activeEl.classList.add('active');
+                activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function speakStep(index) {
+            if (index < 0 || index >= steps.length) return;
+            
+            synthesis.cancel(); // Stop any current speech
+            currentStepIndex = index;
+            updateActiveStep(index);
+            
+            const text = steps[index];
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            
+            // Optional: Select a voice
+            const voices = synthesis.getVoices();
+            // Just pick the first one or a default English one
+            // const voice = voices.find(v => v.lang.includes('en'));
+            // if (voice) currentUtterance.voice = voice;
+
+            currentUtterance.onend = function() {
+                // Automatically go to next step? Or wait? 
+                // Let's wait for user or maybe auto-advance eventually.
+                // For a cooking app, auto-advance might be annoying if you aren't done.
+                // But the prompt said "speak the instructions step by step".
+                // Let's simple create a small delay then proceed or just stop. 
+                // Let's just stop and let user click 'Next' for now, 
+                // BUT "users knows the id so when the user will enter the id and then the website will speak the instructions step by step"
+                // implies a flow. Let's auto-play with a delay? 
+                // Usually voice assistants wait for a "next" command, but since we don't have voice recognition implemented yet,
+                // let's just speak one step and wait for the user to press 'Next'.
+                // Actually, let's auto-play for continuous flow like a podcast?
+                // No, cooking needs time. Let's stop.
+                isPaused = true; 
+            };
+
+            synthesis.speak(currentUtterance);
+            isPaused = false;
+        }
+
+        prevStepBtn.addEventListener('click', () => {
+            if (currentStepIndex > 0) {
+                speakStep(currentStepIndex - 1);
+            }
+        });
+
+        nextStepBtn.addEventListener('click', () => {
+            if (currentStepIndex < steps.length - 1) {
+                speakStep(currentStepIndex + 1);
+            }
+        });
+
+        pauseResumeBtn.addEventListener('click', () => {
+            if (synthesis.speaking) {
+                if (synthesis.paused) {
+                    synthesis.resume();
+                    isPaused = false;
+                } else {
+                    synthesis.pause();
+                    isPaused = true;
+                }
+            } else {
+                // If not speaking, maybe start current step?
+                speakStep(currentStepIndex);
+            }
+        });
+
+    </script>
+</body>
+</html>
