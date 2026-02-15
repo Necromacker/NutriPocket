@@ -612,3 +612,9 @@
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #1A1E23;
 }
+
+.required-star {
+    color: #E53E3E;
+    font-weight: 800;
+    margin-left: 2px;
+}

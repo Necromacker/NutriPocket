@@ -12,14 +12,8 @@ import requests
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+# Simplified CORS setup
+CORS(app)
 
 # Configure Gemini API
 GOOGLE_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -210,7 +204,7 @@ def get_instructions(recipe_id):
     
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status() # Raise an exception for bad status codes
+        response.raise_for_status() 
         return jsonify(response.json())
     except Exception as e:
         # Fallback for demo if API fails (e.g. Rate Limit)

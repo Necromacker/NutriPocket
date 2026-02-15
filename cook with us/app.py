@@ -1,11 +1,18 @@
+import os
 from flask import Flask, render_template, jsonify, request
 import requests
+from flask_cors import CORS
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app) # Enable CORS for frontend requests
 
 # Constants
 API_BASE_URL = "https://api.foodoscope.com/recipe2-api/instructions/"
-API_TOKEN = "Bearer gCsX2sONi5bENi4_KFazz0jr7APGxJNl1DNHrSubNN0JpPHG"
+API_TOKEN = "Bearer X-rU-MJr4BiA64g2PnbvlJp3Ek4HvW1QKniooxvk9sX-l6u0"
 
 # Local recipes for custom dishes
 LOCAL_RECIPES = {
@@ -47,7 +54,7 @@ def get_instructions(recipe_id):
     
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status() # Raise an exception for bad status codes
+        response.raise_for_status() 
         return jsonify(response.json())
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500

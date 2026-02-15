@@ -214,7 +214,7 @@ const Personalize = () => {
             <div className="filter-bar-wrapper">
                 <div className="filter-bar">
                     <div className="filter-item large-dropdown">
-                        <span className="label">Health Condition</span>
+                        <span className="label">Health Condition <span className="required-star">*</span></span>
                         <CustomDropdown
                             options={conditionOptions}
                             value={selectedCondition}

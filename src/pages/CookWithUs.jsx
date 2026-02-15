@@ -80,7 +80,7 @@ const CookWithUs = () => {
         setError('');
 
         try {
-            const response = await fetch(`http://127.0.0.1:5002/api/instructions/${idToUse}`);
+            const response = await fetch(`http://127.0.0.1:5001/api/instructions/${idToUse}`);
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
